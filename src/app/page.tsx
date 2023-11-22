@@ -24,7 +24,7 @@ export default async function EventPage() {
       <CalendarWrapper events={events} />
       <h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
       {posts.map(p => <Link href={`/clubs/posts/${p.id}`}>
-        <News name={p.club.label} date={p.createdAt} postBy={p.owner.firstNameTh} detail={p.content} img={"/event.png"} />
+        <News name={p.club.label} date={p.createdAt} postBy={p.owner.firstNameTh} detail={p.content} img={"/event.png"} postId={p.id} tag={p.type}/>
       </Link>)}
       <button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">
         ข่าวสารทั้งหมด
