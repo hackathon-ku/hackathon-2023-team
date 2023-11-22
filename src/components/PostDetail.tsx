@@ -20,11 +20,11 @@ const PostDetail = () => {
 					ของชมรมเต็มไปด้วยความทรงจำดี ๆ มากมาย และสุดท้ายนี้ ขอฝาก KU Chorus ไว้ในใจของทุกคนในปีต่อ ๆ ไป
 					และสนับสนุนพวกเราตลอดไปเล้ย~
 				</p>
-                <div className="flex gap-2">
-                    <Image src={"/heart.svg"} height={16} width={16} alt={"like"} />
-                    <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} />
-                    <Image src={"/send.svg"} height={16} width={16} alt={"share"} />
-                </div>
+				<div className="flex gap-2">
+					<Image src={"/heart.svg"} height={16} width={16} alt={"like"} />
+					<Image src={"/chat.svg"} height={16} width={16} alt={"comment"} />
+					<Image src={"/send.svg"} height={16} width={16} alt={"share"} />
+				</div>
 			</section>
 		</div>
 	);

@@ -17,7 +17,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 					style={{ width: "100%", height: "auto" }}
 					alt={"event"}
 				/>
-				<div className="absolute w-full bottom-0 p-3 font-bold bg-[#006664] text-white rounded-t-lg">
+				<div className="absolute w-full bottom-0 p-3 font-bold bg-[#006664] text-white rounded-t-xl">
 					ชมรมดนตรีสากลมหาวิทยาลัยเกษตรศาสตร์ (เค ยู แบนด์)
 				</div>
 			</div>

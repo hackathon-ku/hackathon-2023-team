@@ -105,7 +105,7 @@ const News: React.FC<NewsProps> = ({ post }) => {
 			</header>
 			<div className="mb-2">
 				{truncateText(post.content)}{" "}
-				<Link href={`/clubs/${post.clubId}/posts/${post.id}`}>
+				<Link href={`/posts/${post.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
 			</div>
