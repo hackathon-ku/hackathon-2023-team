@@ -144,7 +144,7 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
       {eventInRange?.length !== 0 ? (
         eventInRange.map((e) => (
           <EventBox
-            clubName={e.club.name}
+            clubName={e.club.label}
             eventName={e.title}
             startDate={e.startDate}
             endDate={e.endDate}
