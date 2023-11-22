@@ -38,6 +38,7 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
 		if (windowSize <= 320) return "xs";
 		else if (windowSize <= 375) return "sm";
 		else if (windowSize <= 425) return "md";
+    // else if (windowSize <= )
 	};
 	const dayRenderer: DatePickerProps["renderDay"] = (date) => {
 		const day = date.getDate();
@@ -144,7 +145,7 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
           setCurrentMonth(dayjs(date).month());
         }}
         firstDayOfWeek={0}
-        size={"lg"}
+        size={getSize()}
         maxLevel="month"
         renderDay={dayRenderer}
       ></DatePicker>
