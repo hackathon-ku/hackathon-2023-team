@@ -5,18 +5,18 @@ import CalendarWrapper from "@/components/CalendarWrapper";
 import News from "@/components/News";
 
 export default async function EventPage() {
-	const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-	if (session)
-		return (
-			<main className="flex min-h-screen flex-col items-center p-12 bg-white gap-8">
-				<h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
-				<CalendarWrapper />
-				<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
-				<News />
-				<News />
-				<button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">ข่าวสารทั้งหมด</button>
-			</main>
-		);
-	return <h1>Event Page</h1>;
+  return (
+    <main className="flex min-h-screen flex-col items-center p-12 bg-white gap-8">
+      <h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
+      <CalendarWrapper />
+      <h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
+      <News />
+      <News />
+      <button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">
+        ข่าวสารทั้งหมด
+      </button>
+    </main>
+  );
 }
