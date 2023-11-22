@@ -1,1 +1,1 @@
-export type PostType = "normal_post" | "news" | "qna" | "event";
+export type PostFormType = "normal_post" | "news" | "qna" | "event";

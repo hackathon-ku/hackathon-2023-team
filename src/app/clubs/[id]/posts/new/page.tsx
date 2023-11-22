@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import EventForm from "@/components/EventForm";
 import { cache } from "react";
+import PostForm from "@/app/clubs/_components/PostForm";
 
 interface NewEventPageProps {
 	params: { id: string };
@@ -14,9 +14,11 @@ export default async function NewEventPage({ params }: NewEventPageProps) {
 	if (!club) return null;
 
 	return (
-		<div>
-			<h1>{JSON.stringify(club)}</h1>
-			<EventForm clubId={club.id} />
+		<div className="flex flex-col">
+			<div className="bg-[#006664] px-6 py-4">
+				<span className="text-white font-bold">{club.label}</span>
+			</div>
+			<PostForm clubId={club.id} />
 		</div>
 	);
 }

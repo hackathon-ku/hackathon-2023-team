@@ -1,11 +1,11 @@
 "use client";
 
-import { PostType } from "@/types/post";
+import { PostFormType } from "@/types/post";
 import { Select } from "@mantine/core";
 import Image from "next/image";
 
-const getPostBadge = (postType: PostType) => {
-	switch (postType) {
+const getPostBadge = (postFormType: PostFormType) => {
+	switch (postFormType) {
 		case "normal_post":
 			return "#28C3D7";
 		case "news":
@@ -20,8 +20,8 @@ const getPostBadge = (postType: PostType) => {
 };
 
 type PostSelectorProps = {
-	value: PostType;
-	onChange: (value: PostType) => void;
+	value: PostFormType;
+	onChange: (value: PostFormType) => void;
 };
 
 export default function PostSelector({ value, onChange }: PostSelectorProps) {
@@ -53,7 +53,7 @@ export default function PostSelector({ value, onChange }: PostSelectorProps) {
 			defaultValue="normal_post"
 			allowDeselect={false}
 			withCheckIcon={false}
-			onChange={(value) => onChange(value as PostType)}
+			onChange={(value) => onChange(value as PostFormType)}
 		/>
 	);
 }

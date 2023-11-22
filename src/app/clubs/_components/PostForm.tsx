@@ -7,13 +7,18 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { createEventSchema } from "@/app/validator";
-import { PostType } from "@/types/post";
-import { useState } from "react";
+import { createPostSchema, createEventSchema } from "@/app/validator";
+import { PostFormType } from "@/types/post";
+import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const eventFormSchema = createEventSchema.omit({ clubId: true });
-type EventForm = z.infer<typeof eventFormSchema>;
+const postFormSchema = z
+	.object({
+		...createEventSchema.partial().shape,
+		...createPostSchema.shape,
+	})
+	.omit({ clubId: true });
+type PostForm = z.infer<typeof postFormSchema>;
 
 type PostFormProps = {
 	clubId: number;
@@ -21,27 +26,26 @@ type PostFormProps = {
 
 export default function PostForm({ clubId }: PostFormProps) {
 	const router = useRouter();
-	const [postType, setPostType] = useState<PostType>("normal_post");
+	const [postType, setPostType] = useState<PostFormType>("normal_post");
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<EventForm>({
-		resolver: zodResolver(eventFormSchema),
+	} = useForm<PostForm>({
+		resolver: zodResolver(postFormSchema),
 	});
 
-	const onSubmit: SubmitHandler<EventForm> = async (data) => {
+	const onSubmit: SubmitHandler<PostForm> = async (data) => {
 		const path = postType === "event" ? "events" : "posts";
 		try {
-			const res = await axios.post("/api/events", { ...data, clubId });
+			await axios.post(`/api/posts?type=${postType}`, { ...data, clubId });
 			router.push(`/clubs/${clubId}/${path}`);
-			console.log(res);
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	function onPostTypeChange(value: PostType) {
+	function onPostTypeChange(value: PostFormType) {
 		setPostType(value);
 	}
 
@@ -74,16 +78,20 @@ export default function PostForm({ clubId }: PostFormProps) {
 						{...register("content")}
 						className="w-full my-2 focus:outline-none"
 					/>
-					<input
-						type="text"
-						placeholder="สถานที่จัดงาน"
-						{...register("location")}
-						className="w-full focus:outline-none"
-					/>
-					<input type="date" {...register("startDate")} />
-					<input type="date" {...register("endDate")} />
-					<input type="time" {...register("startTime")} />
-					<input type="time" {...register("endTime")} />
+					{postType === "event" && (
+						<Fragment>
+							<input
+								type="text"
+								placeholder="สถานที่จัดงาน"
+								{...register("location")}
+								className="w-full focus:outline-none"
+							/>
+							<input type="date" {...register("startDate")} />
+							<input type="date" {...register("endDate")} />
+							<input type="time" {...register("startTime")} />
+							<input type="time" {...register("endTime")} />
+						</Fragment>
+					)}
 				</div>
 				<div className="flex items-center justify-between mt-2">
 					<label htmlFor="file-upload" className="custom-file-upload">
