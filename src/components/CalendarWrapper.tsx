@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DatePicker } from "@mantine/dates";
+import { CalendarLevel, DatePicker, DatePickerProps } from "@mantine/dates";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";

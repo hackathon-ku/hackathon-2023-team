@@ -27,7 +27,7 @@ export default function Login() {
 			signIn("credentials", { ...formData, redirect: false })
 				.then((res) => {
 					if (res?.status !== 200) throw Error("Signin Error");
-					router.push("/events");
+					router.push("/");
 				})
 				.catch((error) => { console.log(error); setIsFormError(true)});
 		}
