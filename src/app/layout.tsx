@@ -21,13 +21,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={prompt.className}>
-				<Navbar />
 				<AuthProvider>
 					<MantineProvider>
+						<Navbar />
 						<main className="min-h-[calc(100dvh-10rem)]">{children}</main>
+						<Footer />
 					</MantineProvider>
 				</AuthProvider>
-				<Footer />
 			</body>
 		</html>
 	);
