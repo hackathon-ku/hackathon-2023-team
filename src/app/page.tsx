@@ -1,8 +1,8 @@
 import { getServerSession } from "next-auth";
 import authOptions from "./api/auth/[...nextauth]/options";
 import "@mantine/dates/styles.css";
-import CalendarWrapper from "@/components/CalendarWrapper";
-import News from "@/components/News";
+import CalendarWrapper from "@/app/_components/CalendarWrapper";
+import News from "@/app/_components/News";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
