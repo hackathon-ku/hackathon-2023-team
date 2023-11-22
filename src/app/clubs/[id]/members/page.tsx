@@ -1,12 +1,8 @@
 import Search from "@/components/Search";
 import prisma from "@/lib/prisma";
-import MembersBox from "@/components/Memberbox";
+import MemberBox from "@/components/MemberBox";
 import { cache } from "react";
 import { Role, User } from "@prisma/client";
-
-type ClubQuery = {
-	q: string | undefined;
-};
 
 interface MembersPageProps {
 	params: { id: string };
@@ -37,14 +33,14 @@ const MembersComponent = async (props: MembersComponentProps) => {
 				clubRole.members.map(async (member) => {
 					const userName: any = await fetchUserById(member.userId);
 					return (
-						<MembersBox
+						<MemberBox
 							key={member.userId}
 							name={userName ? userName.titleTh + userName.firstNameTh + " " + userName.lastNameTh : ""}
 						/>
 					);
 				})
 			) : (
-				<MembersBox name="No members found" />
+				<MemberBox name="No members found" />
 			)}
 		</div>
 	);

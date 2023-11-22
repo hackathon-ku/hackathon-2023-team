@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import AuthProvider from "@/provider/auth-provider";
 import { MantineProvider } from "@mantine/core";
 import Footer from "@/components/Footer";
@@ -21,13 +22,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={prompt.className}>
-				<Navbar />
 				<AuthProvider>
 					<MantineProvider>
+						<Navbar />
 						<main className="min-h-[calc(100dvh-10rem)]">{children}</main>
+						<Footer />
 					</MantineProvider>
 				</AuthProvider>
-				<Footer />
 			</body>
 		</html>
 	);

@@ -7,82 +7,90 @@ import localeData from "dayjs/plugin/localeData";
 import { Club, Event } from "@prisma/client";
 import { Indicator } from "@mantine/core";
 import EventBox from "./Event";
+import { animated, useTransition } from "@react-spring/web";
 
 dayjs.extend(localeData);
 dayjs.locale("th");
 
 interface EventWithClub extends Event {
-  club: Club;
+	club: Club;
 }
-interface CalendarWrapperProps {
-  events: EventWithClub[];
+export interface CalendarWrapperProps {
+	events: EventWithClub[];
 }
 
 const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
   const [selectedDate, setSelectedDate] = useState<DateValue | null>(null);
   const [eventInRange, setEventInRange] = useState<EventWithClub[]>([]);
   const [currentMonth, setCurrentMonth] = useState<number>(dayjs().month());
+  const transitions = useTransition(eventInRange, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 1 },
+    trail: 50
+  });
 
-  const getNextMonth = (month: number) => (month >= 11 ? 0 : month + 1);
-  const getPrevMonth = (month: number) => (month <= 0 ? 11 : month - 1);
-  const getSize = () => {
-	const windowSize = window.innerWidth;
+	const getNextMonth = (month: number) => (month >= 11 ? 0 : month + 1);
+	const getPrevMonth = (month: number) => (month <= 0 ? 11 : month - 1);
+	const getSize = () => {
+		const windowSize = window.innerWidth;
 
-    if (windowSize <= 320) return "xs";
-    else if (windowSize <= 375) return "sm";
-    else if (windowSize <= 425) return "md";
-  };
-  const dayRenderer: DatePickerProps["renderDay"] = (date) => {
-    const day = date.getDate();
-    const event = events.filter((e) => {
-      return checkDateInRange(e.startDate, date, e.endDate);
-    });
+		if (windowSize <= 320) return "xs";
+		else if (windowSize <= 375) return "sm";
+		else if (windowSize <= 425) return "md";
+    // else if (windowSize <= )
+	};
+	const dayRenderer: DatePickerProps["renderDay"] = (date) => {
+		const day = date.getDate();
+		const event = events.filter((e) => {
+			return checkDateInRange(e.startDate, date, e.endDate);
+		});
 
-    return event.length != 0 ? (
-      <Indicator size={6} color="gray" offset={-3}>
-        <div>{day}</div>
-      </Indicator>
-    ) : (
-      <div>{day}</div>
-    );
-  };
+		return event.length != 0 ? (
+			<Indicator size={6} color="gray" offset={-3}>
+				<div>{day}</div>
+			</Indicator>
+		) : (
+			<div>{day}</div>
+		);
+	};
 
-  const onDateChange = (date: DateValue) => {
-    setSelectedDate(date);
+	const onDateChange = (date: DateValue) => {
+		setSelectedDate(date);
 
-    if (date) {
-      const inRangeEvent = events.filter((e) => {
-        return checkDateInRange(e.startDate, date, e.endDate);
-      });
-      if (inRangeEvent.length !== 0) {
-        setEventInRange(inRangeEvent);
-      }
-    } else {
-      setEventInRange([]);
-    }
-  };
+		if (date) {
+			const inRangeEvent = events.filter((e) => {
+				return checkDateInRange(e.startDate, date, e.endDate);
+			});
+			if (inRangeEvent.length !== 0) {
+				setEventInRange(inRangeEvent);
+			}
+		} else {
+			setEventInRange([]);
+		}
+	};
 
-  const checkDateInRange = (startDate: Date, date: Date, endDate: Date) => {
-    const day = {
-      start: startDate.getDate(),
-      actual: date.getDate(),
-      endDate: endDate.getDate(),
-    };
+	const checkDateInRange = (startDate: Date, date: Date, endDate: Date) => {
+		const day = {
+			start: startDate.getDate(),
+			actual: date.getDate(),
+			endDate: endDate.getDate(),
+		};
 
-    const month = {
-      start: startDate.getMonth(),
-      actual: date.getMonth(),
-      endDate: endDate.getMonth(),
-    };
+		const month = {
+			start: startDate.getMonth(),
+			actual: date.getMonth(),
+			endDate: endDate.getMonth(),
+		};
 
-    const year = {
-      start: startDate.getUTCFullYear(),
-      actual: date.getUTCFullYear(),
-      endDate: endDate.getUTCFullYear(),
-    };
+		const year = {
+			start: startDate.getUTCFullYear(),
+			actual: date.getUTCFullYear(),
+			endDate: endDate.getUTCFullYear(),
+		};
 
-	return [day, month, year].filter(v => v.start <= v.actual && v.actual <= v.endDate).length === 3;
-  };
+		return [day, month, year].filter((v) => v.start <= v.actual && v.actual <= v.endDate).length === 3;
+	};
 
   return (
     <>
@@ -141,18 +149,17 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
         maxLevel="month"
         renderDay={dayRenderer}
       ></DatePicker>
-      {eventInRange?.length !== 0 ? (
-        eventInRange.map((e) => (
+      {transitions((style, item) =>
+        <animated.div style={style}>
           <EventBox
-            clubName={e.club.name}
-            eventName={e.title}
-            startDate={e.startDate}
-            endDate={e.endDate}
-            location={e.location}
+            clubName={item.club.name}
+            eventName={item.title}
+            startDate={item.startDate}
+            endDate={item.endDate}
+            location={item.location}
+            key={item.id}
           />
-        ))
-      ) : (
-        <></>
+        </animated.div>
       )}
     </>
   );

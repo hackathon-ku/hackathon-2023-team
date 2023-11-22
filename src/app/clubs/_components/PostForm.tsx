@@ -11,6 +11,8 @@ import { createPostSchema, createEventSchema } from "@/app/validator";
 import { PostFormType } from "@/types/post";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Group } from "@mantine/core";
+import { DatePickerInput, TimeInput } from "react-hook-form-mantine";
 
 const postFormSchema = z
 	.object({
@@ -28,6 +30,7 @@ export default function PostForm({ clubId }: PostFormProps) {
 	const router = useRouter();
 	const [postType, setPostType] = useState<PostFormType>("normal_post");
 	const {
+		control,
 		register,
 		handleSubmit,
 		formState: { errors },
@@ -79,18 +82,36 @@ export default function PostForm({ clubId }: PostFormProps) {
 						className="w-full my-2 focus:outline-none"
 					/>
 					{postType === "event" && (
-						<Fragment>
-							<input
-								type="text"
-								placeholder="สถานที่จัดงาน"
-								{...register("location")}
-								className="w-full focus:outline-none"
-							/>
-							<input type="date" {...register("startDate")} />
-							<input type="date" {...register("endDate")} />
-							<input type="time" {...register("startTime")} />
-							<input type="time" {...register("endTime")} />
-						</Fragment>
+						<div className="text-sm">
+							<Fragment>
+								<Group className="pb-1">
+									วันเริ่มต้นและสิ้นสุด:
+									<DatePickerInput control={control} name={"startDate"} placeholder="วันเริ่มต้น" variant="unstyled" />
+									-
+									<DatePickerInput
+										control={control}
+										name={"endDate"}
+										placeholder="วันสิ้นสุด"
+										style={{ fontFamily: `'__Prompt_2d0d9b', '__Prompt_Fallback_2d0d9b'` }}
+										variant="unstyled"
+									/>
+								</Group>
+								<Group className="pb-1">
+									ช่วงเวลา:
+									<TimeInput control={control} name={"startTime"} variant="unstyled" /> -
+									<TimeInput control={control} name={"endTime"} variant="unstyled" />
+								</Group>
+								<Group className="pb-1">
+									สถานที่จัดกิจกรรม:
+									<input
+										type="text"
+										placeholder="สถานที่จัดงาน"
+										{...register("location")}
+										className="focus:outline-none"
+									/>
+								</Group>
+							</Fragment>
+						</div>
 					)}
 				</div>
 				<div className="flex items-center justify-between mt-2">
