@@ -5,6 +5,9 @@ import CalendarWrapper from "@/app/_components/CalendarWrapper";
 import News from "@/app/_components/News";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import Link from "next/link";
+import Search from "@/components/Search";
+import AutocompleteWrapper from "./_components/AutocompleteWrapper";
 
 export type PostInclude = Prisma.PostGetPayload<{
 	include: {
@@ -24,11 +27,16 @@ export default async function EventPage() {
 		include: { club: true, owner: true, likes: true },
 	});
 
+	const clubs = await prisma.club.findMany();
+
+	const session = await getServerSession(authOptions);
+
 	return (
-		<main className="flex min-h-screen flex-col items-center p-12 bg-white gap-8">
+		<main className="flex min-h-screen flex-col items-center p-[24px] bg-white gap-[20px]">
+			<AutocompleteWrapper data={clubs.map((c) => ({ id: c.id.toString(), label: c.label, value: c.id.toString() }))} />
 			<h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
 			<CalendarWrapper events={events} />
-			<h1 className="self-start text-2xl font-bold">โพสต์</h1>
+			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
 			{posts.map((p) => (
 				<News post={p} key={p.id} />
 			))}

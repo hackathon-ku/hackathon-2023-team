@@ -6,10 +6,10 @@ import React, { useEffect, useState } from "react";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/th";
 import { PostType } from "@prisma/client";
-import Tag from "./Tag";
+import Tag from "@/components/Tag";
 import Link from "next/link";
 import { PostInclude } from "@/app/page";
-import LikeButton from "./LikeButton";
+import LikeButton from "@/components/LikeButton";
 import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -75,7 +75,7 @@ const News: React.FC<NewsProps> = ({ post }) => {
 			case PostType.NEWS:
 				return "bg-[#03A96B]";
 			case PostType.QA:
-				return "bg-[#03A96B]";
+				return "bg-[#F2914B]";
 		}
 	};
 	const postTypeToLabelPost = (type: PostType) => {
