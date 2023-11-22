@@ -1,6 +1,6 @@
 import Search from "@/components/Search";
 import prisma from "@/lib/prisma";
-import News from "@/components/News";
+import News from "@/app/_components/News";
 import EventBox from '@/components/EventBox'
 
 import Link from "next/link";
