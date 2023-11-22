@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
 				imageUrl:
 					"https://p-u.popcdn.net/event_details/posters/000/016/273/large/1e3907ba3ac67791527cb88cbe5bab66fa5b0a2d.png?1695702668",
 				ownerId: user.id,
+				approved: true,
 			},
 		});
 
