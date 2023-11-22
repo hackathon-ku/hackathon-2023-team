@@ -156,12 +156,12 @@ model Comment {
   message   String   @db.Text
   createdAt DateTime @default(now()) @map(name: "created_at")
 
-  user    User  @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
   userId  Int
-  post    Post  @relation(fields: [postId], references: [id])
-  postId  Int
-  event   Event @relation(fields: [eventId], references: [id])
-  eventId Int
+  post    Post?  @relation(fields: [postId], references: [id])
+  postId  Int?
+  event   Event? @relation(fields: [eventId], references: [id])
+  eventId Int?
 
   @@index([userId])
   @@index([postId])
@@ -173,12 +173,12 @@ model Like {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map(name: "created_at")
 
-  user    User  @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
   userId  Int
-  post    Post  @relation(fields: [postId], references: [id])
-  postId  Int
-  event   Event @relation(fields: [eventId], references: [id])
-  eventId Int
+  post    Post?  @relation(fields: [postId], references: [id])
+  postId  Int?
+  event   Event? @relation(fields: [eventId], references: [id])
+  eventId Int?
 
   @@index([userId])
   @@index([postId])
