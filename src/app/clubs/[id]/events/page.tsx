@@ -21,7 +21,7 @@ interface MembersComponentProps {
 
 const EventComponent = async (props: MembersComponentProps) => {
 	const events = await prisma.event.findMany();
-    console.log(events);
+    // console.log(events);
 
     const currentDate = new Date();
 

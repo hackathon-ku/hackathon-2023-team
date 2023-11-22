@@ -14,11 +14,13 @@ type Props = {
 };
 
 export default async function clubsProfile({ searchParams }: Props) {
-	const clubs = await prisma.club.findMany({
-		where: {
-			OR: [{ name: { contains: searchParams.q ?? "" } }, { label: { contains: searchParams.q ?? "" } }],
-		},
-	});
+	const posts = await prisma.post.findMany({
+        where: { approved: false },
+        include: { club: true, owner: true }
+      })
+
+      console.log(posts);
+      
 
 	return (
 		<div>
@@ -108,9 +110,9 @@ export default async function clubsProfile({ searchParams }: Props) {
                     <p className="font-bold text-[24px] w-full">โพสต์</p>
                     <Link href={'#'} className="px-[15px] py-[4px] w-min whitespace-nowrap border border-1 border-[#006664] text-[#006664] rounded-[20px]">สร้างโพสต์</Link>
                 </div>
-                <News />
-                <News />
-                <News />
+                {posts.map(p => <Link href={`/clubs/posts/${p.id}`} key={p.id}>
+                    <News name={p.club.label} date={p.createdAt} postBy={p.owner.firstNameTh} detail={p.content} img={"/event.png"} postId={p.id} tag={p.type}/>
+                </Link>)}
                 <Link href={'#'} className="px-[15px] py-[4px] w-min whitespace-nowrap border border-1 border-[#006664] text-[#006664] rounded-[20px]">แสดงเพิ่ม</Link>
             </div>
 			{/* <p>{JSON.stringify(clubs)}</p> */}
