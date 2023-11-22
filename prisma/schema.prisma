@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum KUBranch {
+  Bangkhen
+  Sriracha
+  KamphaengSaen
+  SakonNakorn
+}
+
+enum ClubCategory {
+  UnitOfActivitiesSupport
+  UnitOfStudentOrganization
+  UnitOfActivitiesForCharityAndAcademic
+  UnitOfCulturalAndSportsActivities
+  UnitOFCurriculumAndSpecialPrograms
+}
+
+model Club {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(255)
+  label       String       @db.VarChar(255)
+  category    ClubCategory
+  branch      KUBranch
+  createdAt   DateTime     @default(now()) @map(name: "created_at")
+  updatedAt   DateTime     @updatedAt @map(name: "updated_at")
+  members     Member[]
+  subscribers User[]
+  events      Event[]
+  posts       Post[]
+
+  @@map(name: "clubs")
+}
+
+enum PostType {
+  NORMAL_POST
+  QA
+  NEWS
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  type      PostType
+  content   String   @db.Text
+  imageUrl  String   @db.Text
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  likes    Like[]
+  comments Comment[]
+
+  club    Club @relation(fields: [clubId], references: [id])
+  clubId  Int
+  owner   User @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  @@index([clubId])
+  @@index([ownerId])
+  @@map(name: "posts")
+}
+
+enum EventStatus {
+  WAITING
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+model Event {
+  id        Int         @id @default(autoincrement())
+  title     String      @db.VarChar(255)
+  content   String      @db.Text
+  bannerUrl String      @db.Text
+  location  String      @db.VarChar(255)
+  startDate DateTime
+  endDate   DateTime
+  startTime String
+  endTime   String
+  status    EventStatus @default(OPEN)
+  approved  Boolean     @default(false)
+  createdAt DateTime    @default(now()) @map(name: "created_at")
+  updatedAt DateTime    @updatedAt @map(name: "updated_at")
+
+  followers User[]
+  likes     Like[]
+  comments  Comment[]
+
+  club    Club   @relation(fields: [clubId], references: [id])
+  clubId  Int
+  owner   Member @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  @@index([clubId])
+  @@index([ownerId])
+  @@map(name: "events")
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  stdId        String  @unique
+  titleTh      String
+  titleEn      String
+  firstNameTh  String
+  lastNameTh   String
+  firstNameEn  String
+  lastNameEn   String
+  campusNameTh String
+  campusNameEn String
+  member       Member?
+
+  clubs    Club[]
+  events   Event[]
+  posts    Post[]
+  likes    Like[]
+  comments Comment[]
+
+  @@map(name: "users")
+}
+
+model Member {
+  id   Int  @id @default(autoincrement())
+  role Role @default(NORMAL)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+  club   Club @relation(fields: [clubId], references: [id])
+  clubId Int
+
+  events Event[]
+
+  @@index([clubId])
+  @@map(name: "members")
+}
+
+enum Role {
+  PRESIDENT
+  VICE_PRESIDENT
+  ADMIN
+  NORMAL
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  post    Post  @relation(fields: [postId], references: [id])
+  postId  Int
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  @@index([userId])
+  @@index([postId])
+  @@index([eventId])
+  @@map(name: "comments")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  post    Post  @relation(fields: [postId], references: [id])
+  postId  Int
+  event   Event @relation(fields: [eventId], references: [id])
+  eventId Int
+
+  @@index([userId])
+  @@index([postId])
+  @@index([eventId])
+  @@map(name: "likes")
+}
