@@ -8,6 +8,8 @@ import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import Search from "@/components/Search";
 import AutocompleteWrapper from "./_components/AutocompleteWrapper";
+import SelectWrapper from "./_components/SelectWrapper";
+import CalendarWithFilter from "./_components/CalendarWithFilter";
 
 export type PostInclude = Prisma.PostGetPayload<{
 	include: {
@@ -35,7 +37,7 @@ export default async function EventPage() {
 		<main className="flex min-h-screen flex-col items-center p-[24px] bg-white gap-[20px]">
 			<AutocompleteWrapper data={clubs.map((c) => ({ id: c.id.toString(), label: c.label, value: c.id.toString() }))} />
 			<h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
-			<CalendarWrapper events={events} />
+      <CalendarWithFilter events={events} />
 			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
 			{posts.map((p) => (
 				<News post={p} key={p.id} />

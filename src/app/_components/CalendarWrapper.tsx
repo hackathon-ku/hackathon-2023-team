@@ -15,7 +15,7 @@ dayjs.locale("th");
 interface EventWithClub extends Event {
 	club: Club;
 }
-interface CalendarWrapperProps {
+export interface CalendarWrapperProps {
 	events: EventWithClub[];
 }
 
@@ -144,23 +144,10 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
           setCurrentMonth(dayjs(date).month());
         }}
         firstDayOfWeek={0}
-        size={getSize()}
+        size={"lg"}
         maxLevel="month"
         renderDay={dayRenderer}
       ></DatePicker>
-      {/* {eventInRange?.length !== 0 ? (
-        eventInRange.map((e) => (
-          <EventBox
-            clubName={e.club.name}
-            eventName={e.title}
-            startDate={e.startDate}
-            endDate={e.endDate}
-            location={e.location}
-          />
-        ))
-      ) : (
-        <></>
-      )} */}
       {transitions((style, item) =>
         <animated.div style={style}>
           <EventBox
