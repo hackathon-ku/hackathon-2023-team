@@ -11,3 +11,10 @@ export const createEventSchema = z.object({
 	endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
 	clubId: z.number(),
 });
+
+export const createPostSchema = z.object({
+	title: z.string().min(1).max(255),
+	content: z.string().min(1),
+	// imageUrl: z.string().url(),
+	clubId: z.number(),
+});

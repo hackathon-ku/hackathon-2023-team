@@ -29,6 +29,9 @@ model Club {
   label       String       @db.VarChar(255)
   category    ClubCategory
   branch      KUBranch
+  location    String       @db.VarChar(255)
+  phoneNumber String       @db.VarChar(10)
+  socialMedia Json
   createdAt   DateTime     @default(now()) @map(name: "created_at")
   updatedAt   DateTime     @updatedAt @map(name: "updated_at")
   members     Member[]
@@ -79,7 +82,7 @@ model Event {
   id        Int         @id @default(autoincrement())
   title     String      @db.VarChar(255)
   content   String      @db.Text
-  bannerUrl String      @db.Text
+  imageUrl  String      @db.Text
   location  String      @db.VarChar(255)
   startDate DateTime
   endDate   DateTime
