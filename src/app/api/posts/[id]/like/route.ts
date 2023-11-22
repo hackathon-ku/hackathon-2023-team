@@ -2,10 +2,7 @@ import authOptions from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-
-type PostParams = {
-	params: { id: string };
-};
+import type { PostParams } from "../types";
 
 export async function POST(request: NextRequest, { params }: PostParams) {
 	const session = await getServerSession(authOptions);
