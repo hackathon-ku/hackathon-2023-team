@@ -1,30 +1,45 @@
+"use client";
+
 import React from "react";
 import Tag from "./Tag";
-import Image from "next/image";
+import { PostIncludeAll } from "@/types/post";
+import { FiHeart, FiSend } from "react-icons/fi";
+import { FaRegComment } from "react-icons/fa6";
+import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
+import CommentInput from "./CommentInput";
 
-const PostDetail = () => {
+type PostDetailProps = {
+	post: PostIncludeAll;
+};
+
+const PostDetail = ({ post }: PostDetailProps) => {
 	return (
 		<div className="w-full p-8 flex flex-col gap-3">
 			<header>
 				<div className="flex justify-between font-light text-sm mb-2">
-					<span>โดย ใครเอ่ย</span>
-					<span>15 พ.ย. 66</span>
+					<span>
+						โดย {post.owner.firstNameTh} {post.owner.lastNameTh}
+					</span>
+					<span>
+						{post.createdAt.toLocaleDateString("th-TH", {
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+						})}
+					</span>
 				</div>
-				<span className="text-2xl font-bold">ชมรมดนตรีสากลมหาวิทยาลัย เกษตรศาสตร์ (เค ยู แบนด์)</span>
+				<span className="text-2xl font-bold">{post.title}</span>
 			</header>
 			<section className="flex flex-col gap-4">
-				<Tag tagName={"news"} color={"bg-[#03A96B]"} />
-				<p className="font-light">
-					และแล้ว...งานสุดท้ายของพวกเราในปีการศึกษานี้ก็ได้จบลงไปแล้วกับงาน Creative Village
-					ขอบคุณทุกคนที่มาดูพวกเราแสดงเมื่อวานนี้นะคะ ขอบคุณทุกคนที่มาร่วมเป็น ส่วนหนึ่งที่ทำให้ปีที่ 30
-					ของชมรมเต็มไปด้วยความทรงจำดี ๆ มากมาย และสุดท้ายนี้ ขอฝาก KU Chorus ไว้ในใจของทุกคนในปีต่อ ๆ ไป
-					และสนับสนุนพวกเราตลอดไปเล้ย~
-				</p>
+				<Tag tagName={postTypeToLabelPost(post.type)} color={postTypeToColorMap(post.type)} />
+				<p className="font-light">{post.content}</p>
 				<div className="flex gap-2">
-					<Image src={"/heart.svg"} height={16} width={16} alt={"like"} />
-					<Image src={"/chat.svg"} height={16} width={16} alt={"comment"} />
-					<Image src={"/send.svg"} height={16} width={16} alt={"share"} />
+					{/* <LikeButton isLike={} /> */}
+					<FiHeart className="h-5 w-5" />
+					<FaRegComment className="h-5 w-5" />
+					<FiSend className="h-5 w-5" />
 				</div>
+				<CommentInput postId={post.id} />
 			</section>
 		</div>
 	);
