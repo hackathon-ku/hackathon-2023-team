@@ -28,7 +28,7 @@ const authOptions: AuthOptions = {
 		}),
 	],
 	pages: {
-		signIn: "/signin",
+		signIn: "/login",
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 	callbacks: {
