@@ -18,6 +18,9 @@ const AutocompleteWrapper: React.FC<AutocompleteWrapperProps> = ({ data }) => {
 				placeholder="ค้นหาชมรมและคอมมิวนิตี้ของคุณ"
 				data={data}
         onOptionSubmit={(value) => router.push(`/clubs/${value}`)}
+        styles={{
+          input: { borderRadius: '9999px'}
+        }}
 			/>
 		</div>
 	);
