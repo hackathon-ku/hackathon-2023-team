@@ -13,6 +13,7 @@
 		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
 	},
 	"dependencies": {
+		"@heroicons/react": "^2.0.18",
 		"@hookform/resolvers": "^3.3.2",
 		"@mantine/core": "^7.2.2",
 		"@mantine/dates": "^7.2.2",
