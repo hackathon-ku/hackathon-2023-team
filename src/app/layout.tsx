@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Prompt } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import AuthProvider from "@/provider/auth-provider";
 import { MantineProvider } from "@mantine/core";
 import Footer from "@/components/Footer";
