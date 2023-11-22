@@ -46,9 +46,9 @@ const News: React.FC<NewsProps> = ({ postId, name, date, postBy, detail, img, ta
 				{truncateText(
 					detail
 				)}{" "}
-				<Link style={{ color: "#006664", textDecoration: "underline" }} href={`/clubs/posts/${postId}`}>
+				<span style={{ color: "#006664", textDecoration: "underline" }}>
 					Read more
-				</Link>
+				</span>
 			</div>
 			<div className="w-full relative mb-2">
 				<Image

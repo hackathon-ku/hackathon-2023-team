@@ -145,6 +145,7 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
 						startDate={e.startDate}
 						endDate={e.endDate}
 						location={e.location}
+						key={e.id}
 					/>
 				))
 			) : (
