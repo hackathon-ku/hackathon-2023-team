@@ -13,6 +13,7 @@ import LikeButton from "@/components/LikeButton";
 import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
 interface NewsProps {
 	post: PostInclude;
 }
@@ -68,26 +69,6 @@ const News: React.FC<NewsProps> = ({ post }) => {
 
 	const truncateText = (text: string) => (text.length >= 100 ? text.substring(0, 99) + "..." : text);
 	const getPreviousTime = (date: Date) => dayjs(date).fromNow();
-	const postTypeToColorMap = (type: PostType) => {
-		switch (type) {
-			case PostType.NORMAL_POST:
-				return "bg-[#28C3D7]";
-			case PostType.NEWS:
-				return "bg-[#03A96B]";
-			case PostType.QA:
-				return "bg-[#F2914B]";
-		}
-	};
-	const postTypeToLabelPost = (type: PostType) => {
-		switch (type) {
-			case PostType.NORMAL_POST:
-				return "โพสต์ทั่วไป";
-			case PostType.NEWS:
-				return "ข่าวสาร";
-			case PostType.QA:
-				return "Q&A";
-		}
-	};
 
 	return (
 		<div className="w-full p-4 border rounded-md shadow-sm">
@@ -105,7 +86,7 @@ const News: React.FC<NewsProps> = ({ post }) => {
 			</header>
 			<div className="mb-2">
 				{truncateText(post.content)}{" "}
-				<Link href={`/clubs/${post.clubId}/posts/${post.id}`}>
+				<Link href={`/posts/${post.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
 			</div>

@@ -4,7 +4,7 @@ import "@mantine/dates/styles.css";
 import CalendarWrapper from "@/app/_components/CalendarWrapper";
 import News from "@/app/_components/News";
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { PostType, Prisma } from "@prisma/client";
 import Link from "next/link";
 import Search from "@/components/Search";
 import AutocompleteWrapper from "./_components/AutocompleteWrapper";
@@ -25,7 +25,10 @@ export default async function EventPage() {
 		include: { club: true },
 	});
 	const posts: PostInclude[] = await prisma.post.findMany({
-		where: { approved: true },
+		where: {
+			type: { in: [PostType.NEWS, PostType.NORMAL_POST] },
+			approved: true,
+		},
 		include: { club: true, owner: true, likes: true },
 	});
 
