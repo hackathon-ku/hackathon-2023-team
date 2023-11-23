@@ -10,14 +10,16 @@ import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { getCategoryInThai } from "@/lib/event";
 import FollowClubButton from "@/components/FollowClubButton";
 import RegisterButton from "./_components/RegisterButton";
+import { Role } from "@prisma/client";
+import { Button } from "@mantine/core";
 
 type Props = {
 	params: { id: string };
 };
 
-const fetchRoleById = cache((userId: number) =>
+const fetchMember = cache((clubId: number, userId: number) =>
 	prisma.member.findUnique({
-		where: { userId: userId },
+		where: { userId: userId, clubId: clubId },
 	}),
 );
 
@@ -39,7 +41,13 @@ export default async function ClubsProfile({ params }: Props) {
 	}
 
 	const session = await getServerSession(authOptions);
-	const userRole = session ? await fetchRoleById(session.user.id) : null;
+	const member = session
+		? await prisma.member.findUnique({
+				where: { userId: session.user.id, clubId: club.id },
+		  })
+		: null;
+
+	console.log(member);
 
 	return (
 		<div>
@@ -73,13 +81,12 @@ export default async function ClubsProfile({ params }: Props) {
 				</div>
 				<div className="flex justify-between">
 					<div className="flex gap-[5px]">
-						{/* <button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">ติดตาม</button> */}
-						<FollowClubButton clubId={club.id} isFollowing={club.subscribers.some((s) => s.id === session?.user.id)} />
-						{/* <Button */}
-						<RegisterButton clubId={club.id} />
-						{/* <button className="px-[15px] py-[4px] w-min bg-white bg-opacity-25 rounded-[20px] whitespace-nowrap">
-							สมัครเข้าชมรม
-						</button> */}
+						<FollowClubButton
+							role={member?.role}
+							clubId={club.id}
+							isFollowing={club.subscribers.some((s) => s.id === session?.user.id)}
+						/>
+						<RegisterButton member={member} clubId={club.id} />
 					</div>
 					{club.socialMedia && (
 						<div className="flex gap-[10px]">
@@ -111,18 +118,19 @@ export default async function ClubsProfile({ params }: Props) {
 				</div>
 				<div className="flex gap-[10px] pl-[24px] pb-[24px] pt-[15px] pr-[24px] overflow-auto scrollbar-hide">
 					{club.events.map((event) => (
-						<EventBox
-							key={event.id}
-							eventName={event.title}
-							link={"/"}
-							startDate={Intl.DateTimeFormat("th-TH", { year: "2-digit", month: "short", day: "numeric" }).format(
-								new Date(event.startDate),
-							)}
-							endDate={Intl.DateTimeFormat("th-TH", { year: "2-digit", month: "short", day: "numeric" }).format(
-								new Date(event.endDate),
-							)}
-							location={event.location}
-						/>
+						<Link href={`/events/${event.id}`} key={event.id}>
+							<EventBox
+								eventName={event.title}
+								link={"/"}
+								startDate={Intl.DateTimeFormat("th-TH", { year: "2-digit", month: "short", day: "numeric" }).format(
+									new Date(event.startDate),
+								)}
+								endDate={Intl.DateTimeFormat("th-TH", { year: "2-digit", month: "short", day: "numeric" }).format(
+									new Date(event.endDate),
+								)}
+								location={event.location}
+							/>
+						</Link>
 					))}
 				</div>
 			</div>
@@ -156,7 +164,7 @@ export default async function ClubsProfile({ params }: Props) {
 			<div className="p-[24px] flex flex-col gap-[20px]">
 				<div className="flex">
 					<p className="font-bold text-[24px] w-full ">โพสต์</p>
-					{session && userRole && (
+					{session && member && (
 						<Link href={"#"} className="w-min whitespace-nowrap underline h-min my-auto text-[12px]">
 							โพสต์ที่รออนุมัติ
 						</Link>

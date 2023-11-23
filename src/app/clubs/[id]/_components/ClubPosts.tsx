@@ -63,16 +63,6 @@ export default function ClubPosts({ posts, clubId }: ClubPostProps) {
 				>
 					Q&A
 				</button>
-				<button
-					onClick={() => handleButtonClick("EVENT")}
-					className={`px-[15px] py-[4px] w-min h-fit whitespace-nowrap border border-1 rounded-[20px] ${
-						selectedTypes.includes("EVENT")
-							? "bg-[#F24B4B] border-[#F24B4B] text-white"
-							: "border-[#F24B4B] text-[#F24B4B]"
-					}`}
-				>
-					event
-				</button>
 			</div>
 			{selectedTypes.length === 0
 				? // If selectedTypes is empty, show all posts

@@ -13,6 +13,7 @@ import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Group } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "react-hook-form-mantine";
+import { Role } from "@prisma/client";
 
 const postFormSchema = z
 	.object({
@@ -24,9 +25,10 @@ type PostForm = z.infer<typeof postFormSchema>;
 
 type PostFormProps = {
 	clubId: number;
+	role?: Role;
 };
 
-export default function PostForm({ clubId }: PostFormProps) {
+export default function PostForm({ clubId, role }: PostFormProps) {
 	const router = useRouter();
 	const [postType, setPostType] = useState<PostFormType>("normal_post");
 	const {
@@ -37,6 +39,8 @@ export default function PostForm({ clubId }: PostFormProps) {
 	} = useForm<PostForm>({
 		resolver: zodResolver(postFormSchema),
 	});
+
+	if (!role) return null;
 
 	const onSubmit: SubmitHandler<PostForm> = async (data) => {
 		const path = postType === "event" ? "events" : "posts";
@@ -58,7 +62,7 @@ export default function PostForm({ clubId }: PostFormProps) {
 				<div className="flex items-center">
 					<h1 className="text-2xl font-bold">สร้างโพสต์ใหม่</h1>
 					<div className="w-28 ml-2.5">
-						<PostSelector value={postType} onChange={onPostTypeChange} />
+						<PostSelector role={role} value={postType} onChange={onPostTypeChange} />
 					</div>
 				</div>
 				<Link href={`/clubs/${clubId}`}>

@@ -2,7 +2,9 @@
 
 import { PostFormType } from "@/types/post";
 import { Select } from "@mantine/core";
+import { Role } from "@prisma/client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const getPostBadge = (postFormType: PostFormType) => {
 	switch (postFormType) {
@@ -20,11 +22,35 @@ const getPostBadge = (postFormType: PostFormType) => {
 };
 
 type PostSelectorProps = {
+	role: Role;
 	value: PostFormType;
 	onChange: (value: PostFormType) => void;
 };
 
-export default function PostSelector({ value, onChange }: PostSelectorProps) {
+export default function PostSelector({ role, value, onChange }: PostSelectorProps) {
+	const [options, setOptions] = useState([
+		{ value: "normal_post", label: "โพสต์ทั่วไป" },
+		{ value: "news", label: "ข่าวสาร" },
+		{ value: "qna", label: "Q&A" },
+		{ value: "event", label: "อีเว้นท์" },
+	]);
+
+	useEffect(() => {
+		if (role !== Role.ADMIN) {
+			setOptions([
+				{ value: "normal_post", label: "โพสต์ทั่วไป" },
+				{ value: "qna", label: "Q&A" },
+			]);
+		} else {
+			setOptions([
+				{ value: "normal_post", label: "โพสต์ทั่วไป" },
+				{ value: "news", label: "ข่าวสาร" },
+				{ value: "qna", label: "Q&A" },
+				{ value: "event", label: "อีเว้นท์" },
+			]);
+		}
+	}, [role]);
+
 	return (
 		<Select
 			styles={{
@@ -44,12 +70,7 @@ export default function PostSelector({ value, onChange }: PostSelectorProps) {
 			rightSection={<Image src="/icons/arrow-down.svg" alt="chevron-down" width={9} height={9} />}
 			variant="filled"
 			radius="xl"
-			data={[
-				{ value: "normal_post", label: "โพสต์ทั่วไป" },
-				{ value: "news", label: "ข่าวสาร" },
-				{ value: "qna", label: "Q&A" },
-				{ value: "event", label: "อีเว้นท์" },
-			]}
+			data={options}
 			defaultValue="normal_post"
 			allowDeselect={false}
 			withCheckIcon={false}
