@@ -5,6 +5,7 @@ import { EventIncludeAll } from "@/types/event";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
+import News from "@/app/_components/News";
 
 interface EventDetailPageProps {
 	params: { id: string };
@@ -22,6 +23,11 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 			comments: { select: { id: true, message: true, createdAt: true, user: true }, orderBy: { createdAt: "desc" } },
 			followers: true,
 		},
+	});
+
+	const club = await prisma.club.findUnique({
+		where: { id: event?.clubId },
+		include: { posts: { include: { owner: true, likes: true, club: true } } },
 	});
 
 	if (!event) {
@@ -44,7 +50,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 				</div>
 			</div>
 			<EventDetail event={event} />
-			<div className="w-full px-8 flex flex-col gap-3">
+			<div className="w-full px-8 flex flex-col gap-3 mb-4">
 				{event.comments.map((c) => (
 					<CommentBox
 						name={`${c.user.firstNameTh} ${c.user.lastNameTh}`}
@@ -54,6 +60,12 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 						firstChar={c.user.firstNameEn.substring(0, 1)}
 						key={c.id}
 					/>
+				))}
+			</div>
+			<p className="font-bold text-[24px] w-full px-8 mb-2">โพสต์ต่างๆจากชมรม</p>
+			<div className="w-full px-8 flex flex-col gap-4">
+				{club?.posts.map((p) => (
+					<News post={p} key={p.id} />
 				))}
 			</div>
 		</div>

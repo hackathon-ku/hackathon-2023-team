@@ -8,6 +8,7 @@ import CarouselWrapper from "./_components/CarouselWrapper";
 import CommentBox from "../../../components/CommentBox";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
+import News from "@/app/_components/News";
 
 interface PostDetailPageProps {
 	params: { id: string };
@@ -24,6 +25,11 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 			likes: true,
 			comments: { select: { id: true, message: true, createdAt: true, user: true }, orderBy: { createdAt: "desc" } },
 		},
+	});
+
+	const club = await prisma.club.findUnique({
+		where: { id: post?.clubId },
+		include: { posts: { include: { owner: true, likes: true, club: true } } },
 	});
 
 	if (!post) {
@@ -49,6 +55,12 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 						firstChar={c.user.firstNameEn.substring(0, 1)}
 						key={c.id}
 					/>
+				))}
+			</div>
+			<p className="font-bold text-[24px] w-full px-8 mb-2">โพสต์ต่างๆจากชมรม</p>
+			<div className="w-full px-8 flex flex-col gap-4">
+				{club?.posts.map((p) => (
+					<News post={p} key={p.id} />
 				))}
 			</div>
 		</div>

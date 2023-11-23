@@ -59,7 +59,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
 			</header>
 			<section className="flex flex-col gap-[15px]">
 				<Tag tagName={postTypeToLabelPost(post.type)} color={postTypeToColorMap(post.type)} />
-				<p className="font-light">{post.content}</p>
+				<p className="break-all font-light">{post.content}</p>
 				<div className="flex gap-2">
 					<LikeButton isLike={isLike} like={like} unlike={unlike} postId={post.id} type="post" />
 					<FiSend className="h-5 w-5" />
