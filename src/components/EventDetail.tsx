@@ -1,18 +1,45 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tag from "./Tag";
-import { FiHeart, FiSend } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 import { FaRegComment } from "react-icons/fa6";
 import CommentInput from "./CommentInput";
 import { EventIncludeAll } from "@/types/event";
 import FollowEventButton from "./FollowEventButton";
+import LikeButton from "./LikeButton";
+import { useSession } from "next-auth/react";
 
 type EventDetailProps = {
 	event: EventIncludeAll;
 };
 
 const EventDetail = ({ event }: EventDetailProps) => {
+	const session = useSession();
+	const isAuthenticated = session.status === "authenticated";
+
+	const [likeCount, setLikeCount] = useState<number>(event.likes.length);
+	const [isLike, setIsLike] = useState<boolean>(
+		isAuthenticated ? event.likes.some((like) => like.userId === session.data.user.id) : false,
+	);
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			setIsLike(event.likes.some((like) => like.userId === session.data.user.id));
+		} else {
+			setIsLike(false);
+		}
+	}, [isAuthenticated, session, event]);
+
+	const like = () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev + 1);
+	};
+	const unlike = async () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev - 1);
+	};
+
 	return (
 		<div className="w-full p-8 flex flex-col gap-3">
 			<header>
@@ -35,14 +62,13 @@ const EventDetail = ({ event }: EventDetailProps) => {
 				<p className="font-light">{event.content}</p>
 				<div className="flex items-center justify-between">
 					<div className="flex gap-2">
-						{/* <LikeButton isLike={} /> */}
-						<FiHeart className="h-5 w-5" />
+						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={event.id} type="event" />
 						<FaRegComment className="h-5 w-5" />
 						<FiSend className="h-5 w-5" />
 					</div>
 					<FollowEventButton />
-					{/* <button>ติดตามอีเว้นท์นี้</button> */}
 				</div>
+				{likeCount > 0 && <p className="font-light text-sm">{likeCount} likes</p>}
 				<CommentInput type={"event"} postId={event.id} />
 			</section>
 		</div>
