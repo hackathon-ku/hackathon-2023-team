@@ -9,13 +9,12 @@ interface NewEventPageProps {
 }
 
 const fetchClub = cache((clubId: number) => prisma.club.findUnique({ where: { id: clubId } }));
-const fetchMember = cache((clubId: number, userId?: number) => prisma.member.findUnique({ where: { clubId, userId } }));
 
 export default async function NewEventPage({ params }: NewEventPageProps) {
 	const session = await getServerSession(authOptions);
 	const club = await fetchClub(parseInt(params.id));
 
-	const member = await fetchMember(parseInt(params.id), session?.user.id);
+	const member = await prisma.member.findUnique({ where: { clubId: parseInt(params.id), userId: session?.user.id } })
 
 	if (!club) return null;
 
@@ -24,7 +23,7 @@ export default async function NewEventPage({ params }: NewEventPageProps) {
 			<div className="bg-[#006664] px-6 py-4">
 				<span className="text-white font-bold">{club.label}</span>
 			</div>
-			<PostForm role={member?.role} clubId={club.id} />
+			<PostForm member={member} clubId={club.id} />
 		</div>
 	);
 }

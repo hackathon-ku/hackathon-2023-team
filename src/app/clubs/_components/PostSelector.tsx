@@ -22,7 +22,7 @@ const getPostBadge = (postFormType: PostFormType) => {
 };
 
 type PostSelectorProps = {
-	role: Role;
+	role: Role | null;
 	value: PostFormType;
 	onChange: (value: PostFormType) => void;
 };
@@ -36,7 +36,7 @@ export default function PostSelector({ role, value, onChange }: PostSelectorProp
 	]);
 
 	useEffect(() => {
-		if (role !== Role.ADMIN) {
+		if (role !== Role.ADMIN || !role) {
 			setOptions([
 				{ value: "normal_post", label: "โพสต์ทั่วไป" },
 				{ value: "qna", label: "Q&A" },
