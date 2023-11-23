@@ -37,11 +37,8 @@ export async function POST(request: NextRequest) {
 		const newEvent = await prisma.event.create({
 			data: {
 				...validation.data,
-				startDate: new Date(body.startDate),
-				endDate: new Date(body.endDate),
-				// TODO: Uncomment this when we have a bannerUrl field
-				imageUrl:
-					"https://p-u.popcdn.net/event_details/posters/000/016/273/large/1e3907ba3ac67791527cb88cbe5bab66fa5b0a2d.png?1695702668",
+				startDate: new Date(validation.data.startDate),
+				endDate: new Date(validation.data.endDate),
 				ownerId: member.id,
 			},
 		});
@@ -65,9 +62,8 @@ export async function POST(request: NextRequest) {
 		const newPost = await prisma.post.create({
 			data: {
 				...validation.data,
+				
 				type: postFormTypeToPostType(postType),
-				imageUrl:
-					"https://p-u.popcdn.net/event_details/posters/000/016/273/large/1e3907ba3ac67791527cb88cbe5bab66fa5b0a2d.png?1695702668",
 				ownerId: session.user.id,
 			},
 		});
@@ -88,8 +84,6 @@ export async function POST(request: NextRequest) {
 			data: {
 				...validation.data,
 				type: postFormTypeToPostType(postType),
-				imageUrl:
-					"https://p-u.popcdn.net/event_details/posters/000/016/273/large/1e3907ba3ac67791527cb88cbe5bab66fa5b0a2d.png?1695702668",
 				ownerId: user.id,
 				approved: true,
 			},

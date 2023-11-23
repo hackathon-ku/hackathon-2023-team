@@ -114,7 +114,7 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
           calendarHeaderLevel: {
             color: "#006664",
             fontWeight: "bold",
-            paddingBottom: "0.25rem",
+            paddingBottom: "0.1rem",
             fontSize: "1rem",
             width: "fit-content",
             textAlign: "center",
@@ -126,7 +126,10 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
           },
           monthThead: {
             backgroundColor: "#28C3D7",
+            height: '36px',
+            width: '36px',
             border: "1px solid #F2F2F2",
+            paddingBottom: '0px !important',
           },
           weekdaysRow: {},
           weekday: {
@@ -160,7 +163,8 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
         maxLevel="month"
         renderDay={dayRenderer}
       ></DatePicker>
-      {eventTransition((style, item) =>
+      <div className="w-full flex flex-col gap-[20px]">
+        {eventTransition((style, item) =>
         (<animated.div style={style}>
           <Link href={"/events/" + item.id}>
             <EventBox
@@ -175,6 +179,8 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
         </animated.div>)
       )}
       {<animated.p style={props}>ไม่มีกิจกรรมในช่วงเวลานี้</animated.p>}
+      </div>
+      
     </>
   );
 };

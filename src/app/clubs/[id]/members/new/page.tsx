@@ -14,7 +14,13 @@ export default async function NewMemberPage({ params }: NewMemberPageProps) {
     const session = await getServerSession(authOptions);
     const club = await fetchClub(parseInt(params.id));
 
-	if (!session) return null;
+	if (!session) {
+		return (
+			<div className='flex justify-center'>
+				กรุณาเข้าสู่ระบบเพื่อสมัครสมาชิกชมรม	
+			</div>
+		)
+	};
 
 	return (
 		<div className="flex flex-col">

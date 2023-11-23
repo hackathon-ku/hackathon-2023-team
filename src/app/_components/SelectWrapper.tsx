@@ -20,7 +20,7 @@ const SelectWrapper: React.FC<SelectWrapperProps> = ({value, setValue}) => {
                 },
                 input: {
                     borderRadius: '9999px',
-                    paddingRight: '24px',
+                    paddingRight: '5px',
                     backgroundColor: '#03A96B',
                     color: 'white',
                     border: '0'

@@ -21,3 +21,19 @@ body {
 	color:#2f3337 !important;
 	background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
+
+.m-18a3eca {
+  padding-bottom: 0 !important;
+}
+
+.m-cc9820d3 {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgb(242, 242, 242);
+  outline: 1px solid rgb(242, 242, 242);
+}
+
+.m-396ce5cb[data-outside]{
+  color: white;
+  background-color: #B0E3FB;
+}

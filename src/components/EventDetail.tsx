@@ -63,7 +63,6 @@ const EventDetail = ({ event }: EventDetailProps) => {
 				<div className="flex items-center justify-between">
 					<div className="flex gap-2">
 						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={event.id} type="event" />
-						<FaRegComment className="h-5 w-5" />
 						<FiSend className="h-5 w-5" />
 					</div>
 					<FollowEventButton

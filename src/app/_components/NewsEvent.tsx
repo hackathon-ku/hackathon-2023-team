@@ -17,6 +17,8 @@ import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
 import { useDisclosure } from "@mantine/hooks";
 import Modal from "@/components/CustomModal";
 import { useRouter } from "next/navigation";
+import { FaRegComment } from "react-icons/fa6";
+import { FiSend } from "react-icons/fi";
 interface NewsEventProps {
 	event: EventInclude;
 	role?: Role;
@@ -97,7 +99,7 @@ const NewsEvent: React.FC<NewsEventProps> = ({ event, role }) => {
 			</div>
 			<div className="w-full relative mb-2">
 				<Image
-					src={"/event.png"}
+					src={event.imageUrl || "/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"
@@ -108,11 +110,9 @@ const NewsEvent: React.FC<NewsEventProps> = ({ event, role }) => {
 			{!canApprove(role) ? (
 				<div>
 					<div className="flex gap-1 mb-2">
-						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"event"} />
-						<ChatBubbleOvalLeftIcon className="h-5 w-5" />
-						<PaperAirplaneIcon className="h-5 w-5" />
-						{/* <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} /> */}
-						{/* <Image src={"/send.svg"} height={16} width={16} alt={"share"} /> */}
+						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"post"} />
+						<FaRegComment className="h-5 w-5" />
+						<FiSend className="h-5 w-5" />
 					</div>
 					<div className="flex justify-between gap-2">
 						<p className="h-1/2 font-light text-xs">{likeCount} likes</p>

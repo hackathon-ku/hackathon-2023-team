@@ -4,7 +4,6 @@ import { PostIncludeAll } from "@/types/post";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
 import { cache } from "react";
-import { Carousel } from "@mantine/carousel";
 import CarouselWrapper from "./_components/CarouselWrapper";
 import CommentBox from "../../../components/CommentBox";
 import { getServerSession } from "next-auth";
@@ -34,13 +33,13 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-white">
 			<div className="h-fit w-full relative">
-				<CarouselWrapper />
+				<CarouselWrapper post={post} />
 				<div className="absolute w-full -bottom-5 p-3 font-bold bg-[#006664] text-white rounded-t-xl">
 					{post.club.label}
 				</div>
 			</div>
 			<PostDetail post={post} />
-			<div className="w-full px-8 flex flex-col gap-3">
+			<div className="w-full px-[24px] pb-[24px] flex flex-col gap-[15px]">
 				{post.comments.map((c) => (
 					<CommentBox
 						name={`${c.user.firstNameTh} ${c.user.lastNameTh}`}

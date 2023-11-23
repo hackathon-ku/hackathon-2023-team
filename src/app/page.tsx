@@ -50,14 +50,12 @@ export default async function EventPage() {
 		<main className="flex min-h-screen flex-col items-center p-[24px] bg-white gap-[20px]">
 			<AutocompleteWrapper data={clubs.map((c) => ({ id: c.id.toString(), label: c.label, value: c.id.toString() }))} />
 			<h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
+      
 			<CalendarWithFilter events={events} user={session?.user} clubs={clubs} />
-			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
+			<h1 className="self-start text-2xl font-bold">โพสต์</h1>
 			{posts.map((p) => (
 				<News post={p} key={p.id} />
 			))}
-			<button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">
-				ข่าวสารทั้งหมด
-			</button>
 		</main>
 	);
 }

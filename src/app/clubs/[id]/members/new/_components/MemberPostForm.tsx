@@ -6,14 +6,11 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { createPostSchema, createEventSchema } from "@/app/validator";
-import { PostFormType } from "@/types/post";
-import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Group, Input, Modal } from "@mantine/core";
-import { DatePickerInput, TimeInput } from "react-hook-form-mantine";
+import { Modal } from "@mantine/core";
 import { User } from "@prisma/client";
 import { useDisclosure } from "@mantine/hooks";
+import { registerMemberData } from "@/app/api/mock-data";
 
 const postFormSchema = z.object({
 	year: z.number().min(1).max(6),
@@ -34,6 +31,7 @@ type PostFormProps = {
 export default function MemberPostForm({ user, clubId }: PostFormProps) {
 	const [opened, { open, close }] = useDisclosure(false);
 	const router = useRouter();
+	const { data } = registerMemberData
 
 	const {
 		control,
@@ -67,17 +65,17 @@ export default function MemberPostForm({ user, clubId }: PostFormProps) {
 			<form onSubmit={handleSubmit(onSubmit)} className="my-3 flex flex-col justify-between">
 				<div className="flex flex-col gap-2">
 					<label>ชั้นปี</label>
-					<input {...register("year")} className="w-full border-b" />
+					<input defaultValue={data.user.year} {...register("year")} className="w-full border-b" />
 					<label>คณะ</label>
-					<input {...register("faculty")} className="w-full border-b" />
+					<input defaultValue={data.user.faculty} {...register("faculty")} className="w-full border-b" />
 					<label>สาขา</label>
-					<input {...register("department")} className="w-full border-b" />
+					<input defaultValue={data.user.department} {...register("department")} className="w-full border-b" />
 					<label>Email</label>
-					<input {...register("email")} className="w-full border-b" />
+					<input defaultValue={data.user.email} {...register("email")} className="w-full border-b" />
 					<label>เบอร์ที่สามารถติดต่อได้</label>
-					<input {...register("phone")} className="w-full border-b" />
+					<input defaultValue={data.user.phone} {...register("phone")} className="w-full border-b" />
 					<label>เหตุผลที่อยากเข้าร่วม</label>
-					<input {...register("reason")} className="w-full border-b mb-4" />
+					<input defaultValue={data.user.reason} {...register("reason")} className="w-full border-b mb-4" />
 					<button
 						className="self-end   w-32 bg-inherit text-[#006664] border border-[#006664] px-4 py-1 rounded-full"
 						onClick={open}
