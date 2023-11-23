@@ -39,7 +39,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
 					<FaRegComment className="h-5 w-5" />
 					<FiSend className="h-5 w-5" />
 				</div>
-				<CommentInput postId={post.id} />
+				<CommentInput type={"post"} postId={post.id} />
 			</section>
 		</div>
 	);
