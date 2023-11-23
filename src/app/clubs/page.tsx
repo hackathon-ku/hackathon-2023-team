@@ -25,7 +25,7 @@ export default async function Clubs({ searchParams }: Props) {
 			{clubs
 			.filter((club) => club.branch === 'Bangkhen')
 			.map((club) => (
-				<ClubBox clubName={club.label} key={club.id} />
+				<ClubBox clubName={club.label} clubId={club.id} key={club.id} />
 			))}
 			<p className="font-bold">วิทยาเขตกำแพงแสน</p>
 			<p className="font-bold">วิทยาเขตเฉลิมพระเกียรติ จังหวัดสกลนคร</p>
