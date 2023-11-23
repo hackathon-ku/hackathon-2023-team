@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { getCategoryInThai } from "@/lib/event";
 import FollowClubButton from "@/components/FollowClubButton";
+import RegisterButton from "./_components/RegisterButton";
 
 type Props = {
 	params: { id: string };
@@ -74,9 +75,11 @@ export default async function ClubsProfile({ params }: Props) {
 					<div className="flex gap-[5px]">
 						{/* <button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">ติดตาม</button> */}
 						<FollowClubButton clubId={club.id} isFollowing={club.subscribers.some((s) => s.id === session?.user.id)} />
-						<button className="px-[15px] py-[4px] w-min bg-white bg-opacity-25 rounded-[20px] whitespace-nowrap">
+						{/* <Button */}
+						<RegisterButton clubId={club.id} />
+						{/* <button className="px-[15px] py-[4px] w-min bg-white bg-opacity-25 rounded-[20px] whitespace-nowrap">
 							สมัครเข้าชมรม
-						</button>
+						</button> */}
 					</div>
 					{club.socialMedia && (
 						<div className="flex gap-[10px]">

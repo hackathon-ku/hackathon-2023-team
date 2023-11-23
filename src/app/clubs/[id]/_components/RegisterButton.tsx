@@ -1,19 +1,30 @@
-"use client"
+"use client";
+import { Button } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 interface RegisterButtonProps {
-    clubId: string
+	clubId: number;
 }
 
 const RegisterButton: React.FC<RegisterButtonProps> = ({ clubId }) => {
-    const router = useRouter();
+	const router = useRouter();
 
-    const onClick = () => {
-        router.push(`/clubs/${clubId}/members/new`);
-    }
+	const onClick = () => {
+		router.push(`/clubs/${clubId}/members/new`);
+	};
 
-	return <button onClick={onClick} className="px-4 py-2 w-fit bg-white/25 rounded-[20px]">สมัครเข้าชมรม</button>;
+	return (
+		<Button
+			variant="filled"
+			size="xs"
+			radius="xl"
+			style={{ backgroundColor: "rgba(255, 255, 255, 0.25)", color: "#fff", fontWeight: "400" }}
+			onClick={onClick}
+		>
+			สมัครเข้าชมรม
+		</Button>
+	);
 };
 
 export default RegisterButton;
