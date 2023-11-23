@@ -45,7 +45,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 
 	const approveByPostId = async (postId: number, type: PostType, clubId: number) => {
 		try {
-			const res = await axios.post(`/api/posts/${postId}/approve?type=${type}`, { clubId });
+			await axios.post(`/api/posts/${postId}/approve?type=${type}`, { clubId });
 			router.push(`/clubs/${post.clubId}`);
 			// console.log(res);
 		} catch (e) {
@@ -61,33 +61,13 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 		}
 	}, [isAuthenticated, session, post]);
 
-	const like = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.post(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev + 1);
-		} catch (error) {
-			console.error("Post like failed: ", error);
-		}
+	const like = () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev + 1);
 	};
-	const unlike = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.delete(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev - 1);
-		} catch (error) {
-			console.error("Unlike failed: ", error);
-		}
+	const unlike = () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev - 1);
 	};
 
 	const truncateText = (text: string) => (text.length >= 100 ? text.substring(0, 99) + "..." : text);
@@ -130,15 +110,13 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 					<div className="flex gap-1 mb-2">
 						<LikeButton
 							isLike={isLike}
-							like={() => like(post.id)}
-							unlike={() => unlike(post.id)}
+							like={like}
+							unlike={unlike}
 							postId={0}
 							type={"post"}
 						/>
 						<ChatBubbleOvalLeftIcon className="h-5 w-5" />
 						<PaperAirplaneIcon className="h-5 w-5" />
-						{/* <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} /> */}
-						{/* <Image src={"/send.svg"} height={16} width={16} alt={"share"} /> */}
 					</div>
 					<div className="flex justify-between gap-2">
 						<p className="h-1/2 font-light text-xs">{likeCount} likes</p>

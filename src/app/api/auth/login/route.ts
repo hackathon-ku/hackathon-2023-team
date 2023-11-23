@@ -3,6 +3,7 @@ import { z } from "zod";
 import prisma from "@/lib/prisma";
 import axios from "axios";
 import { mockingUserResponse } from "@/app/api/mock-data";
+import { encodeString } from "@/lib/string";
 
 type AuthLoginResponse = {
 	user: {
@@ -34,20 +35,18 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json(validation.error.format(), { status: 400 });
 		}
 
-		// TODO: Request to KU auth login API
-		// const response = await axios.post<AuthLoginResponse>(
-		// 	`${process.env.KU_SERVER_URL}/auth/login`,
-		// 	{
-		// 		username: encodeString(body.username),
-		// 		password: encodeString(body.password),
-		// 	},
-		// 	{
-		// 		headers: {
-		// 			"app-key": process.env.KU_APP_KEY,
-		// 		},
-		// 	},
-		// );
-		const response = mockingUserResponse;
+		const response = await axios.post<AuthLoginResponse>(
+			`${process.env.KU_SERVER_URL}/auth/login`,
+			{
+				username: encodeString(body.username),
+				password: encodeString(body.password),
+			},
+			{
+				headers: {
+					"app-key": process.env.KU_APP_KEY,
+				},
+			},
+		);
 
 		const { stdId, ...userData } = response.data.user.student;
 		const updatedUserData = {
