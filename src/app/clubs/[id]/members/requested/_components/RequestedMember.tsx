@@ -1,5 +1,6 @@
 "use-client";
 
+import { registerMemberData } from "@/app/api/mock-data";
 import React from "react";
 // import { Modal } from "@mantine/core";
 // import { useDisclosure } from "@mantine/hooks";
@@ -10,6 +11,7 @@ interface RequestedMemberProb {
 
 const RequestedMember: React.FC<RequestedMemberProb> = ({ m }) => {
 	// const [opened, { open, close }] = useDisclosure(false);
+	const member = registerMemberData.data.user;
 
 	return (
 		<div className="flex flex-col">
@@ -21,26 +23,25 @@ const RequestedMember: React.FC<RequestedMemberProb> = ({ m }) => {
 				<p className="font-bold text-base">ผู้สมัครเข้าชมรมทั้งหมด</p>
 				<div className="items-center">
 					<div className="flex flex-col justify-between p-4 w-full border border-gray-200 rounded-xl shadow-xl">
-						<p className="text-2xl font-bold">มิกกี้ เมาส์</p>
+						<p className="text-2xl font-bold">{member.name}</p>
 						<div className="py-2">
 							<p>
-								<span className="font-bold">ชั้นปี</span>: 4
+								<span className="font-bold">ชั้นปี</span>: {member.year}
 							</p>
 							<p>
-								<span className="font-bold">คณะ</span>: วิศวกรรมศาสตร์
+								<span className="font-bold">คณะ</span>: {member.faculty}
 							</p>
 							<p>
-								<span className="font-bold">สาขา</span>: ซอฟต์แวร์
+								<span className="font-bold">สาขา</span>: {member.department}
 							</p>
 							<p>
-								<span className="font-bold">email</span>: micky_emmyay@ku.th
+								<span className="font-bold">email</span>: {member.email}
 							</p>
 							<p>
-								<span className="font-bold">เบอร์โทรศัพท์</span>: 0XX-XXX-XXXX
+								<span className="font-bold">เบอร์โทรศัพท์</span>: {member.phone}
 							</p>
 							<p>
-								<span className="font-bold">เหตุผลที่อยากเข้าชมรม</span>: สนใจในการทำกิจกรรมด้านนี้
-								มีความชอบในการเล่นดนตรีมาตั้งแต่ยังจำความไม่ได้ และเล่นกีตาร์เป็นตั้งแต่อยู่ในท้องแม่
+								<span className="font-bold">เหตุผลที่อยากเข้าชมรม</span>: {member.reason}
 							</p>
 						</div>
 						<div className="flex flex-row">
