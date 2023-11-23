@@ -66,7 +66,10 @@ const EventDetail = ({ event }: EventDetailProps) => {
 						<FaRegComment className="h-5 w-5" />
 						<FiSend className="h-5 w-5" />
 					</div>
-					<FollowEventButton />
+					<FollowEventButton
+						eventId={event.id}
+						isFollowing={event.followers.some((f) => f.id === session.data?.user.id)}
+					/>
 				</div>
 				{likeCount > 0 && <p className="font-light text-sm">{likeCount} likes</p>}
 				<CommentInput type={"event"} postId={event.id} />
