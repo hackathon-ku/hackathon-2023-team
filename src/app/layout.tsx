@@ -3,6 +3,7 @@ import { Prompt } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
+import '@mantine/carousel/styles.css';
 import AuthProvider from "@/provider/auth-provider";
 import { MantineProvider } from "@mantine/core";
 import Footer from "@/components/Footer";
