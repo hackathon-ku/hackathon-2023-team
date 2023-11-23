@@ -6,16 +6,25 @@ import Image from "next/image";
 import { cache } from "react";
 import { Carousel } from "@mantine/carousel";
 import CarouselWrapper from "./_components/CarouselWrapper";
-import Comment from "./_components/Comment";
+import CommentBox from "../../../components/CommentBox";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 interface PostDetailPageProps {
 	params: { id: string };
 }
 
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
+	const session = await getServerSession(authOptions);
+
 	const post: PostIncludeAll | null = await prisma.post.findUnique({
 		where: { id: parseInt(params.id) },
-		include: { club: true, owner: true, likes: true, comments: { orderBy: { createdAt: "desc" } } },
+		include: {
+			club: true,
+			owner: true,
+			likes: true,
+			comments: { select: { id: true, message: true, createdAt: true, user: true }, orderBy: { createdAt: "desc" } },
+		},
 	});
 
 	if (!post) {
@@ -32,11 +41,17 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 			</div>
 			<PostDetail post={post} />
 			<div className="w-full px-8 flex flex-col gap-3">
-			{post.comments.map((c) => (
-				<Comment key={c.id} name={"Dan"} message={c.message} createdAt={c.createdAt} />
-			))}
+				{post.comments.map((c) => (
+					<CommentBox
+						name={`${c.user.firstNameTh} ${c.user.lastNameTh}`}
+						message={c.message}
+						createdAt={c.createdAt}
+						isYou={session?.user.id === c.user.id}
+						firstChar={c.user.firstNameEn.substring(0, 1)}
+						key={c.id}
+					/>
+				))}
 			</div>
-
 		</div>
 	);
 }
