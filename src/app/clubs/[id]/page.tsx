@@ -165,7 +165,7 @@ export default async function ClubsProfile({ params }: Props) {
 				<div className="flex">
 					<p className="font-bold text-[24px] w-full ">โพสต์</p>
 					{session && member && (
-						<Link href={"#"} className="w-min whitespace-nowrap underline h-min my-auto text-[12px]">
+						<Link href={"/clubs/" + club.id + "/posts/requested"} className="w-min whitespace-nowrap underline h-min my-auto text-[12px]">
 							โพสต์ที่รออนุมัติ
 						</Link>
 					)}

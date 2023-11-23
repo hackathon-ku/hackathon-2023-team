@@ -90,7 +90,7 @@ const NewsEvent: React.FC<NewsEventProps> = ({ event, role }) => {
 				</div>
 			</header>
 			<div className="mb-2">
-				{truncateText(event.content)}{" "}
+				<span className="mr-2 break-all">{truncateText(event.content)}</span>
 				<Link href={`/posts/${event.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
