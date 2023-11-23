@@ -12,9 +12,14 @@ const fetchClub = cache((clubId: number) => prisma.club.findUnique({ where: { id
 
 export default async function NewEventPage({ params }: NewEventPageProps) {
 	const session = await getServerSession(authOptions);
+
+	if (!session) {
+		return <div className="flex items-center justify-center">เข้าสู่ระบบเพื่อสร้างโพสต์</div>;
+	}
+
 	const club = await fetchClub(parseInt(params.id));
 
-	const member = await prisma.member.findUnique({ where: { clubId: parseInt(params.id), userId: session?.user.id } })
+	const member = await prisma.member.findUnique({ where: { clubId: parseInt(params.id), userId: session?.user.id } });
 
 	if (!club) return null;
 
