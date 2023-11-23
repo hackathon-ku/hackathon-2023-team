@@ -19,6 +19,14 @@ export type PostInclude = Prisma.PostGetPayload<{
 	};
 }>;
 
+export type EventInclude = Prisma.EventGetPayload<{
+	include: {
+		club: true;
+		owner: { select: { user: true } };
+		likes: true;
+	};
+}>;
+
 export default async function EventPage() {
 	const events = await prisma.event.findMany({
 		where: { approved: true },
@@ -45,7 +53,7 @@ export default async function EventPage() {
 			<CalendarWithFilter events={events} user={session?.user} clubs={clubs} />
 			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
 			{posts.map((p) => (
-				<News post={p} role={undefined} key={p.id} />
+				<News post={p} key={p.id} />
 			))}
 			<button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">
 				ข่าวสารทั้งหมด
