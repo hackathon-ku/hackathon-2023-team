@@ -1,12 +1,11 @@
 import { Prisma } from "@prisma/client";
 
-export type PostFormType = "normal_post" | "news" | "qna" | "event";
-
-export type PostIncludeAll = Prisma.PostGetPayload<{
+export type EventIncludeAll = Prisma.EventGetPayload<{
 	include: {
 		club: true;
-		owner: true;
+		owner: { select: { user: true } };
 		likes: true;
 		comments: { select: { id: true; message: true; createdAt: true; user: true } };
+		followers: true;
 	};
 }>;

@@ -1,6 +1,5 @@
 import Search from "@/components/Search";
 import prisma from "@/lib/prisma";
-import MembersBox from "@/components/Memberbox";
 import EventBox from '@/components/EventBox'
 import { cache } from "react";
 import { Role, User } from "@prisma/client";
@@ -47,7 +46,7 @@ const EventComponent = async (props: MembersComponentProps) => {
 			{events.length > 0 && (
             <>
             {props.status === 'กิจกรรมที่กำลังจัดตอนนี้' && presentEvents.length > 0 && (
-                <div className="flex flex-col gap-[20px]">
+                <div className="flex flex-col gap-[20px] border-[2px] border-[#28C3D7] rounded-[20px]">
                 {presentEvents.map((event) => (
                     <EventBox 
                     key={event.id} 
@@ -61,7 +60,7 @@ const EventComponent = async (props: MembersComponentProps) => {
             )}
 
             {props.status === 'กิจกรรมที่กำลังจะเกิดขึ้น' && upcomingEvents.length > 0 && (
-                <div>
+                <div className="flex flex-col gap-[20px]">
                 {upcomingEvents.map((event) => (
                     <EventBox 
                     key={event.id} 
@@ -75,7 +74,7 @@ const EventComponent = async (props: MembersComponentProps) => {
             )}
 
             {props.status === 'กิจกรรมที่ผ่านมา' && pastEvents.length > 0 && (
-                <div>
+                <div className="flex flex-col gap-[20px]">
                 {pastEvents.map((event) => (
                     <EventBox 
                     key={event.id} 

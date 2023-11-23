@@ -1,47 +1,51 @@
-import PostDetail from "@/components/PostDetail";
+import EventDetail from "@/components/EventDetail";
+import CommentBox from "@/components/CommentBox";
 import prisma from "@/lib/prisma";
-import { PostIncludeAll } from "@/types/post";
-import { Prisma } from "@prisma/client";
+import { EventIncludeAll } from "@/types/event";
 import Image from "next/image";
-import { cache } from "react";
-import { Carousel } from "@mantine/carousel";
-import CarouselWrapper from "./_components/CarouselWrapper";
-import CommentBox from "../../../components/CommentBox";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 
-interface PostDetailPageProps {
+interface EventDetailPageProps {
 	params: { id: string };
 }
 
-export default async function PostDetailPage({ params }: PostDetailPageProps) {
+export default async function EventDetailPage({ params }: EventDetailPageProps) {
 	const session = await getServerSession(authOptions);
 
-	const post: PostIncludeAll | null = await prisma.post.findUnique({
+	const event: EventIncludeAll | null = await prisma.event.findUnique({
 		where: { id: parseInt(params.id) },
 		include: {
 			club: true,
-			owner: true,
+			owner: { select: { user: true } },
 			likes: true,
 			comments: { select: { id: true, message: true, createdAt: true, user: true }, orderBy: { createdAt: "desc" } },
+			followers: true,
 		},
 	});
 
-	if (!post) {
-		return <div>Post not found</div>;
+	if (!event) {
+		return <div>Event not found</div>;
 	}
 
 	return (
 		<div className="flex min-h-screen flex-col items-center bg-white">
 			<div className="h-fit w-full relative">
-				<CarouselWrapper />
-				<div className="absolute w-full -bottom-5 p-3 font-bold bg-[#006664] text-white rounded-t-xl">
-					{post.club.label}
+				<Image
+					src={"/event.png"}
+					width={0}
+					height={0}
+					sizes="100vw"
+					style={{ width: "100%", height: "auto" }}
+					alt={"event"}
+				/>
+				<div className="absolute w-full bottom-0 p-3 font-bold bg-[#006664] text-white rounded-t-xl">
+					{event.club.label}
 				</div>
 			</div>
-			<PostDetail post={post} />
+			<EventDetail event={event} />
 			<div className="w-full px-8 flex flex-col gap-3">
-				{post.comments.map((c) => (
+				{event.comments.map((c) => (
 					<CommentBox
 						name={`${c.user.firstNameTh} ${c.user.lastNameTh}`}
 						message={c.message}

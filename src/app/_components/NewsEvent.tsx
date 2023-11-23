@@ -5,10 +5,10 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/th";
-import { Post, PostType, Role } from "@prisma/client";
+import { Post, PostType, Role, User } from "@prisma/client";
 import Tag from "@/components/Tag";
 import Link from "next/link";
-import { PostInclude } from "@/app/page";
+import { EventInclude } from "@/app/page";
 import LikeButton from "@/components/LikeButton";
 import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
@@ -17,8 +17,8 @@ import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
 import { useDisclosure } from "@mantine/hooks";
 import Modal from "@/components/CustomModal";
 import { useRouter } from "next/navigation";
-interface NewsProps {
-	post: PostInclude;
+interface NewsEventProps {
+	event: EventInclude;
 	role?: Role;
 }
 
@@ -32,21 +32,21 @@ const canApprove = (role?: Role) => {
 dayjs.extend(relativeTime);
 dayjs.locale("th");
 
-const News: React.FC<NewsProps> = ({ post, role }) => {
+const NewsEvent: React.FC<NewsEventProps> = ({ event, role }) => {
 	const session = useSession();
 	const isAuthenticated = session.status === "authenticated";
 	const router = useRouter();
 
-	const [likeCount, setLikeCount] = useState<number>(post.likes.length);
+	const [likeCount, setLikeCount] = useState<number>(event.likes.length);
 	const [isLike, setIsLike] = useState<boolean>(
-		isAuthenticated ? post.likes.some((like) => like.userId === session.data.user.id) : false,
+		isAuthenticated ? event.likes.some((like) => like.userId === session.data.user.id) : false,
 	);
 	const [opened, { open, close }] = useDisclosure(false);
 
-	const approveByPostId = async (postId: number, type: PostType, clubId: number) => {
+	const approveByPostId = async (eventId: number, clubId: number) => {
 		try {
-			const res = await axios.post(`/api/posts/${postId}/approve?type=${type}`, { clubId });
-			router.push(`/clubs/${post.clubId}`);
+			const res = await axios.post(`/api/posts/${eventId}/approve?type=event`, { clubId });
+			router.push(`/events/${eventId}`);
 			// console.log(res);
 		} catch (e) {
 			console.log(e);
@@ -55,39 +55,19 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			setIsLike(post.likes.some((like) => like.userId === session.data.user.id));
+			setIsLike(event.likes.some((like) => like.userId === session.data.user.id));
 		} else {
 			setIsLike(false);
 		}
-	}, [isAuthenticated, session, post]);
+	}, [isAuthenticated, session, event]);
 
-	const like = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.post(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev + 1);
-		} catch (error) {
-			console.error("Post like failed: ", error);
-		}
+	const like = async () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev + 1);
 	};
-	const unlike = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.delete(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev - 1);
-		} catch (error) {
-			console.error("Unlike failed: ", error);
-		}
+	const unlike = async () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev - 1);
 	};
 
 	const truncateText = (text: string) => (text.length >= 100 ? text.substring(0, 99) + "..." : text);
@@ -98,20 +78,20 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 			<header className="flex items-center gap-2 mb-4">
 				<div className="rounded-full p-4 h-6 w-6 flex items-center justify-center bg-orange-400 color-white">A</div>
 				<div className="w-full flex-1 flex flex-col">
-					<Link href={`/clubs/${post.clubId}`}>
+					<Link href={`/clubs/${event.clubId}`}>
 						<div className="flex justify-between items-center">
-							<p className="h-1/2 font-normal">{post.club.label}</p>
+							<p className="h-1/2 font-normal">{event.club.label}</p>
 						</div>
 					</Link>
-					<p className="h-1/2 text-xs font-light">{post.owner.firstNameTh}</p>
+					<p className="h-1/2 text-xs font-light">{event.owner.user.firstNameTh}</p>
 				</div>
 				<div className="">
-					<Tag tagName={postTypeToLabelPost(post.type)} color={postTypeToColorMap(post.type)} />
+					<Tag tagName="อีเว้นท์" color="bg-[#F24B4B]" />
 				</div>
 			</header>
 			<div className="mb-2">
-				{truncateText(post.content)}{" "}
-				<Link href={`/posts/${post.id}`}>
+				{truncateText(event.content)}{" "}
+				<Link href={`/posts/${event.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
 			</div>
@@ -128,13 +108,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 			{!canApprove(role) ? (
 				<div>
 					<div className="flex gap-1 mb-2">
-						<LikeButton
-							isLike={isLike}
-							like={() => like(post.id)}
-							unlike={() => unlike(post.id)}
-							postId={0}
-							type={"post"}
-						/>
+						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"event"} />
 						<ChatBubbleOvalLeftIcon className="h-5 w-5" />
 						<PaperAirplaneIcon className="h-5 w-5" />
 						{/* <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} /> */}
@@ -142,7 +116,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 					</div>
 					<div className="flex justify-between gap-2">
 						<p className="h-1/2 font-light text-xs">{likeCount} likes</p>
-						<p className="h-1/2 font-light text-xs">{getPreviousTime(post.createdAt)}</p>
+						<p className="h-1/2 font-light text-xs">{getPreviousTime(event.createdAt)}</p>
 					</div>
 				</div>
 			) : (
@@ -157,13 +131,15 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 			)}
 			<Modal centered opened={opened} onClose={close} withCloseButton={false}>
 				<p className="font-light mb-2">
-					คุณตกลงอนุมัติโพสต์หัวข้อ <span className="font-bold">{post.title}</span>
-					<p>โดย {post.owner.titleTh + post.owner.firstNameTh + " " + post.owner.lastNameTh} ใช่หรือไม่</p>
+					คุณตกลงอนุมัติโพสต์หัวข้อ <span className="font-bold">{event.title}</span>
+					<p>
+						โดย {event.owner.user.titleTh + event.owner.user.firstNameTh + " " + event.owner.user.lastNameTh} ใช่หรือไม่
+					</p>
 				</p>
 				<div className="flex gap-2 pt-2 items-center justify-center">
 					<button
 						onClick={() => {
-							approveByPostId(post.id, post.type, post.clubId);
+							approveByPostId(event.id, event.clubId);
 						}}
 						className="py-1 px-4 rounded-full bg-[#006664] text-white"
 					>
@@ -182,4 +158,4 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 	);
 };
 
-export default News;
+export default NewsEvent;

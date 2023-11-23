@@ -19,10 +19,18 @@ export type PostInclude = Prisma.PostGetPayload<{
 	};
 }>;
 
+export type EventInclude = Prisma.EventGetPayload<{
+	include: {
+		club: true;
+		owner: { select: { user: true } };
+		likes: true;
+	};
+}>;
+
 export default async function EventPage() {
 	const events = await prisma.event.findMany({
 		where: { approved: true },
-		include: { club: true },
+		include: { club: true, followers: true },
 	});
 	const posts: PostInclude[] = await prisma.post.findMany({
 		where: {
@@ -32,7 +40,9 @@ export default async function EventPage() {
 		include: { club: true, owner: true, likes: true },
 	});
 
-	const clubs = await prisma.club.findMany();
+	const clubs = await prisma.club.findMany({
+		include: { subscribers: true },
+	});
 
 	const session = await getServerSession(authOptions);
 
@@ -40,7 +50,7 @@ export default async function EventPage() {
 		<main className="flex min-h-screen flex-col items-center p-[24px] bg-white gap-[20px]">
 			<AutocompleteWrapper data={clubs.map((c) => ({ id: c.id.toString(), label: c.label, value: c.id.toString() }))} />
 			<h1 className="self-start text-2xl font-bold">ตารางอีเว้นท์และกิจกรรม</h1>
-			<CalendarWithFilter events={events} />
+			<CalendarWithFilter events={events} user={session?.user} clubs={clubs} />
 			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
 			{posts.map((p) => (
 				<News post={p} key={p.id} />

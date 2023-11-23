@@ -4,10 +4,10 @@ import { DatePicker, DatePickerProps, DateValue } from "@mantine/dates";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
-import { Club, Event } from "@prisma/client";
+import { Club, Event, User } from "@prisma/client";
 import { Indicator } from "@mantine/core";
 import EventBox from "./Event";
-import { animated, useTransition } from "@react-spring/web";
+import { animated, useSpring, useTransition } from "@react-spring/web";
 
 dayjs.extend(localeData);
 dayjs.locale("th");
@@ -15,20 +15,27 @@ dayjs.locale("th");
 interface EventWithClub extends Event {
 	club: Club;
 }
+
+interface EventWithClubWithFollwer extends EventWithClub {
+  followers: User[]
+}
 export interface CalendarWrapperProps {
-	events: EventWithClub[];
+	events: EventWithClubWithFollwer[];
 }
 
 const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
   const [selectedDate, setSelectedDate] = useState<DateValue | null>(null);
   const [eventInRange, setEventInRange] = useState<EventWithClub[]>([]);
   const [currentMonth, setCurrentMonth] = useState<number>(dayjs().month());
-  const transitions = useTransition(eventInRange, {
+  const eventTransition = useTransition(eventInRange, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 1 },
-    trail: 50
   });
+  const props = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: eventInRange.length === 0 ? 1 : 0 },
+  })
 
 	const getNextMonth = (month: number) => (month >= 11 ? 0 : month + 1);
 	const getPrevMonth = (month: number) => (month <= 0 ? 11 : month - 1);
@@ -62,9 +69,12 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
 			const inRangeEvent = events.filter((e) => {
 				return checkDateInRange(e.startDate, date, e.endDate);
 			});
-			if (inRangeEvent.length !== 0) {
+
+      if (inRangeEvent.length !== 0) {
 				setEventInRange(inRangeEvent);
-			}
+			} else {
+        setEventInRange([]);
+      }
 		} else {
 			setEventInRange([]);
 		}
@@ -149,8 +159,8 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
         maxLevel="month"
         renderDay={dayRenderer}
       ></DatePicker>
-      {transitions((style, item) =>
-        <animated.div style={style}>
+      {eventTransition((style, item) =>
+        (<animated.div style={style}>
           <EventBox
             clubName={item.club.name}
             eventName={item.title}
@@ -159,8 +169,9 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
             location={item.location}
             key={item.id}
           />
-        </animated.div>
+        </animated.div>)
       )}
+      {<animated.p style={props}>ไม่มีกิจกรรมในช่วงเวลานี้</animated.p>}
     </>
   );
 };
