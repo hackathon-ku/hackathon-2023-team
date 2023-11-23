@@ -1,5 +1,6 @@
+This is a design from figma : (https://www.figma.com/file/lXMlxn6WOBjLRKxfOJ1X0i/ChomromKU_Hackathon?type=design&node-id=39%3A3346&mode=dev)
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-This is design : https://www.figma.com/file/lXMlxn6WOBjLRKxfOJ1X0i/ChomromKU_Hackathon?type=design&node-id=39%3A3346&mode=dev
+
 
 
 ## Getting Started
