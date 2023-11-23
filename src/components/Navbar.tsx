@@ -2,21 +2,23 @@
 
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function Navbar() {
 	const pathname = usePathname();
 	const { status, data } = useSession();
+	const [isUserTabOpen, setIsUserTabOpen] = useState(false);
 
 	if (pathname.includes("login")) {
 		return null;
 	}
 
 	return (
-		<nav className="bg-white w-full flex items-center justify-between h-16 px-4 text-[#006664]">
+		<nav className="bg-white w-full flex items-center justify-between h-16 px-4 text-[#006664] relative">
 			<Link href="/">
 				<Image alt="chomromku" src="/logo.svg" width="0" height="0" sizes="10vw" className="h-8 w-auto" />
 			</Link>
@@ -27,8 +29,11 @@ export default function Navbar() {
 					</Link>
 				</li>
 				{status === "authenticated" ? (
-					<li className="bg-[#006664] w-8 h-8 flex items-center justify-center rounded-full">
-						<span className="text-white">{data.user.firstNameEn.substring(0, 1)}</span>
+					<li
+						onClick={() => setIsUserTabOpen((prev) => !prev)}
+						className="bg-[#006664] w-8 h-8 flex items-center justify-center rounded-full"
+					>
+						<span className="text-white">{data.user.firstNameEn[0]}</span>
 					</li>
 				) : (
 					<li>
@@ -38,6 +43,14 @@ export default function Navbar() {
 					</li>
 				)}
 			</ul>
+			{isUserTabOpen && (
+				<div
+					onClick={() => signOut()}
+					className="cursor-pointer bg-slate-100 rounded absolute -bottom-5 shadow right-4 z-10"
+				>
+					<span className="p-4 rounded">ออกจากระบบ</span>
+				</div>
+			)}
 		</nav>
 	);
 }

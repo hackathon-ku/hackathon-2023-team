@@ -6,19 +6,20 @@ import { Club, KUBranch } from "@prisma/client";
 import { User } from "next-auth";
 import FollowFilter from "./FollowFilter";
 
-interface ClubWithSubscriber extends Club{
-	subscribers: User[]
+interface ClubWithSubscriber extends Club {
+	subscribers: User[];
 }
 
 interface CalendarWithFilterProps extends CalendarWrapperProps {
 	user: User | undefined;
-	clubs: ClubWithSubscriber[]
+	clubs: ClubWithSubscriber[];
 }
 
 const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events, user, clubs }) => {
 	const [campus, setCampus] = useState("บางเขน");
-	const [filterFollowings, setFilterFollowings] = useState({ club: false, event: false })
+	const [filterFollowings, setFilterFollowings] = useState({ club: false, event: false });
 	const [fitleredEvents, setFilteredEvents] = useState(events);
+	console.log(user);
 
 	const getThaiBranch = (branch: KUBranch) => {
 		switch (branch) {
@@ -35,22 +36,27 @@ const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events, user, c
 		let filtered = events;
 
 		if (user) {
-			if (filterFollowings.event) {	
-				filtered = filtered.filter(e => {
-					return e.followers.map(f => f.id).includes(user.id);
-				});
+			if (filterFollowings.event) {
+				const followersId = events
+					.map((e) => e.followers)
+					.flat()
+					.map((f) => f.id);
+
+				filtered = filtered.filter((_) => followersId.includes(user.id));
 			}
 
 			if (filterFollowings.club) {
-				const subscribersId = clubs.map(c => c.subscribers).flat().map(s => s.id);
+				const subscribersId = clubs
+					.map((c) => c.subscribers)
+					.flat()
+					.map((s) => s.id);
 
-				filtered = filtered.filter(_ => subscribersId.includes(user.id));
+				filtered = filtered.filter((_) => subscribersId.includes(user.id));
 			}
 		}
 
-		filtered = filtered.filter(e => getThaiBranch(e.club.branch) === campus);
+		filtered = filtered.filter((e) => getThaiBranch(e.club.branch) === campus);
 
-		
 		setFilteredEvents(filtered);
 
 		return () => {};
@@ -62,7 +68,7 @@ const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events, user, c
 				<SelectWrapper value={campus} setValue={setCampus} />
 				{user ? (
 					<>
-						<FollowFilter followingCheck={filterFollowings} setFollowingCheck={setFilterFollowings}/>
+						<FollowFilter followingCheck={filterFollowings} setFollowingCheck={setFilterFollowings} />
 					</>
 				) : (
 					""

@@ -13,7 +13,7 @@ export default function Footer() {
 				<Image alt="facebook" src="/icons/facebook.svg" width="16" height="16" />
 				<Image alt="instagram" src="/icons/instagram.svg" width="16" height="16" />
 			</div>
-			<Link href="https://google.com" className="text-xs underline">
+			<Link href="https://forms.gle/tZTJzN1o3HpzDFMn8" className="text-xs underline">
 				รายงานปัญหา
 			</Link>
 		</footer>
