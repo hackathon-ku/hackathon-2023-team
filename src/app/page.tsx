@@ -33,7 +33,7 @@ export default async function EventPage() {
 	});
 
 	const clubs = await prisma.club.findMany({
-		include: { subscribers: true}
+		include: { subscribers: true },
 	});
 
 	const session = await getServerSession(authOptions);
@@ -45,7 +45,7 @@ export default async function EventPage() {
 			<CalendarWithFilter events={events} user={session?.user} clubs={clubs} />
 			<h1 className="self-start text-2xl font-bold">ข่าวสารจากชมรม</h1>
 			{posts.map((p) => (
-				<News post={p} key={p.id} />
+				<News post={p} role={undefined} key={p.id} />
 			))}
 			<button className="self-end rounded-full py-1.5 px-6 border border-[#006664] text-[#006664] text-sm">
 				ข่าวสารทั้งหมด
