@@ -9,7 +9,7 @@ const Tag = ({ tagName, color }: TagProps) => {
   
   return (
     <div 
-      className={`flex w-fit justify-center py-1 px-2 rounded-full ${color} text-white font-light text-sm`} 
+      className={`flex w-fit justify-center py-[3px] px-[10px] rounded-full ${color} text-white font-light text-[12px]`} 
       style={{ backgroundColor: color.slice(4, -1)}}
     >
         {tagName}
