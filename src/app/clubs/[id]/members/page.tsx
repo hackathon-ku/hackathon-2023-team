@@ -14,23 +14,16 @@ interface MembersComponentProps {
 	role: Role;
 }
 
-const fetchClubWithMembersByRole = cache((clubId: number, memberRole: Role) =>
-	prisma.club.findUnique({
-		where: { id: clubId, members: { every: { role: memberRole } } },
-		include: { members: true },
-	}),
-);
-
 const fetchUserById = cache((userId: number) => prisma.user.findUnique({ where: { id: userId } }));
 
 const MembersComponent = async (props: MembersComponentProps) => {
-	const clubRole = await fetchClubWithMembersByRole(parseInt(props.clubId), props.role);
+	const members = await prisma.member.findMany({ where: { clubId: parseInt(props.clubId), role: props.role }})
 
 	return (
 		<div>
 			<p>{props.name}</p>
-			{clubRole ? (
-				clubRole.members.map(async (member) => {
+			{members.length !== 0 ? (
+				members.map(async (member) => {
 					const userName: any = await fetchUserById(member.userId);
 					return (
 						<MemberBox
@@ -40,7 +33,7 @@ const MembersComponent = async (props: MembersComponentProps) => {
 					);
 				})
 			) : (
-				<MemberBox name="No members found" />
+				<MemberBox name="ไม่พบสมาชิกในตำแหน่งนี้" />
 			)}
 		</div>
 	);
