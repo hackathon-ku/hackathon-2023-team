@@ -59,7 +59,7 @@ const EventDetail = ({ event }: EventDetailProps) => {
 			</header>
 			<section className="flex flex-col gap-4">
 				<Tag tagName={"อีเว้นท์"} color={"bg-[#F24B4B]"} />
-				<p className="font-light">{event.content}</p>
+				<p className="font-light break-all">{event.content}</p>
 				<div className="flex items-center justify-between">
 					<div className="flex gap-2">
 						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={event.id} type="event" />
