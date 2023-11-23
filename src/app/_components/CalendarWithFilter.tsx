@@ -2,12 +2,22 @@
 import React, { useEffect, useState } from "react";
 import SelectWrapper from "./SelectWrapper";
 import CalendarWrapper, { CalendarWrapperProps } from "./CalendarWrapper";
-import { KUBranch } from "@prisma/client";
+import { Club, KUBranch } from "@prisma/client";
+import { User } from "next-auth";
+import FollowFilter from "./FollowFilter";
 
-interface CalendarWithFilterProps extends CalendarWrapperProps {}
+interface ClubWithSubscriber extends Club{
+	subscribers: User[]
+}
 
-const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events }) => {
+interface CalendarWithFilterProps extends CalendarWrapperProps {
+	user: User | undefined;
+	clubs: ClubWithSubscriber[]
+}
+
+const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events, user, clubs }) => {
 	const [campus, setCampus] = useState("บางเขน");
+	const [filterFollowings, setFilterFollowings] = useState({ club: false, event: false })
 	const [fitleredEvents, setFilteredEvents] = useState(events);
 
 	const getThaiBranch = (branch: KUBranch) => {
@@ -22,17 +32,42 @@ const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events }) => {
 	};
 
 	useEffect(() => {
-		const filtered = events.filter((e) => getThaiBranch(e.club.branch) === campus);
+		let filtered = events;
+
+		if (user) {
+			if (filterFollowings.event) {
+				const followersId = events.map(e => e.followers).flat().map(f => f.id);
+	
+				filtered = filtered.filter(_ => followersId.includes(user.id));
+			}
+
+			if (filterFollowings.club) {
+				const subscribersId = clubs.map(c => c.subscribers).flat().map(s => s.id);
+
+				filtered = filtered.filter(_ => subscribersId.includes(user.id));
+			}
+		}
+
+		filtered = filtered.filter(e => getThaiBranch(e.club.branch) === campus);
+
+		
 		setFilteredEvents(filtered);
 
 		return () => {};
-	}, [campus]);
+	}, [campus, filterFollowings]);
 
 	return (
 		<>
-            <div className="w-full flex items-start">
-			    <SelectWrapper value={campus} setValue={setCampus} />
-            </div>
+			<div className="w-full flex items-start gap-2">
+				<SelectWrapper value={campus} setValue={setCampus} />
+				{user ? (
+					<>
+						<FollowFilter followingCheck={filterFollowings} setFollowingCheck={setFilterFollowings}/>
+					</>
+				) : (
+					""
+				)}
+			</div>
 			<CalendarWrapper events={fitleredEvents} />
 		</>
 	);

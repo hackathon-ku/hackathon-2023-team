@@ -75,9 +75,11 @@ const News: React.FC<NewsProps> = ({ post }) => {
 			<header className="flex items-center gap-2 mb-4">
 				<div className="rounded-full p-4 h-6 w-6 flex items-center justify-center bg-orange-400 color-white">A</div>
 				<div className="w-full flex-1 flex flex-col">
-					<div className="flex justify-between items-center">
-						<p className="h-1/2 font-normal">{post.club.label}</p>
-					</div>
+					<Link href={`/clubs/${post.clubId}`}>
+						<div className="flex justify-between items-center">
+							<p className="h-1/2 font-normal">{post.club.label}</p>
+						</div>
+					</Link>
 					<p className="h-1/2 text-xs font-light">{post.owner.firstNameTh}</p>
 				</div>
 				<div className="">

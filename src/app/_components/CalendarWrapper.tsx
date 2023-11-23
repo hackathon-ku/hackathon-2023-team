@@ -4,7 +4,7 @@ import { DatePicker, DatePickerProps, DateValue } from "@mantine/dates";
 import "dayjs/locale/th";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
-import { Club, Event } from "@prisma/client";
+import { Club, Event, User } from "@prisma/client";
 import { Indicator } from "@mantine/core";
 import EventBox from "./Event";
 import { animated, useTransition } from "@react-spring/web";
@@ -15,8 +15,12 @@ dayjs.locale("th");
 interface EventWithClub extends Event {
 	club: Club;
 }
+
+interface EventWithClubWithFollwer extends EventWithClub {
+  followers: User[]
+}
 export interface CalendarWrapperProps {
-	events: EventWithClub[];
+	events: EventWithClubWithFollwer[];
 }
 
 const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
