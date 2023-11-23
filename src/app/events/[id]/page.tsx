@@ -32,7 +32,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 		<div className="flex min-h-screen flex-col items-center bg-white">
 			<div className="h-fit w-full relative">
 				<Image
-					src={"/event.png"}
+					src={event.imageUrl || "/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"

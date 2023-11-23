@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createEventSchema = z.object({
 	title: z.string().min(1).max(255),
 	content: z.string().min(1),
-	// bannerUrl: z.string().url(),
+	imageUrl: z.string().url(),
 	location: z.string().min(1).max(255),
 	startDate: z
 		.string()
@@ -21,6 +21,6 @@ export const createEventSchema = z.object({
 export const createPostSchema = z.object({
 	title: z.string().min(1).max(255),
 	content: z.string().min(1),
-	// imageUrl: z.string().url(),
+	imageUrl: z.string().url(),
 	clubId: z.number(),
 });

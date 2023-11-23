@@ -99,7 +99,7 @@ const NewsEvent: React.FC<NewsEventProps> = ({ event, role }) => {
 			</div>
 			<div className="w-full relative mb-2">
 				<Image
-					src={"/event.png"}
+					src={event.imageUrl || "/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"

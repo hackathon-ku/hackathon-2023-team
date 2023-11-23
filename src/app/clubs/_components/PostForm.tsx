@@ -13,7 +13,8 @@ import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Group } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "react-hook-form-mantine";
-import { Member, Prisma, Role } from "@prisma/client";
+import { Member } from "@prisma/client";
+import { useS3Upload } from "next-s3-upload";
 
 const postFormSchema = z
 	.object({
@@ -36,13 +37,20 @@ export default function PostForm({ clubId, member }: PostFormProps) {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<PostForm>({
-		resolver: zodResolver(postFormSchema),
+	} = useForm<PostForm>({});
+	const { uploadToS3 } = useS3Upload();
+	const [image, setImage] = useState({
+		name: "",
+		url: "",
 	});
 
 	const onSubmit: SubmitHandler<PostForm> = async (data) => {
+		if (!image.url) {
+			alert("กรุณาอัพโหลดรูปภาพ");
+			return;
+		}
 		try {
-			await axios.post(`/api/posts?type=${postType}`, { ...data, clubId });
+			await axios.post(`/api/posts?type=${postType}`, { ...data, clubId, imageUrl: image.url });
 			router.push(`/clubs/${clubId}`);
 		} catch (error) {
 			console.error(error);
@@ -51,6 +59,21 @@ export default function PostForm({ clubId, member }: PostFormProps) {
 
 	function onPostTypeChange(value: PostFormType) {
 		setPostType(value);
+	}
+
+	console.log(errors);
+
+	async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+		const files = event.target.files;
+		if (!files) return;
+		if (files.length < 1) return;
+		let file = files[0];
+
+		const res = await uploadToS3(file);
+		setImage({
+			name: "อัพโหลดภาพสำเร็จ",
+			url: res.url,
+		});
 	}
 
 	return (
@@ -117,9 +140,15 @@ export default function PostForm({ clubId, member }: PostFormProps) {
 				</div>
 				<div className="flex items-center justify-between mt-2">
 					<label htmlFor="file-upload" className="custom-file-upload">
-						เพิ่มรูปภาพ
+						{image.name === "" ? "เพิ่มรูปภาพ" : "อัพโหลดภาพสำเร็จ"}
 					</label>
-					<input id="file-upload" type="file" accept="image/jpeg, image/png" className="hidden" />
+					<input
+						id="file-upload"
+						type="file"
+						accept="image/jpeg, image/png"
+						onChange={handleFileChange}
+						className="hidden"
+					/>
 					<button type="submit" className="bg-inherit text-[#006664] border border-[#006664] px-4 py-1 rounded-full">
 						สร้างโพสต์
 					</button>

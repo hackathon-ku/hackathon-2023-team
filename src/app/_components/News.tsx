@@ -100,7 +100,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 			</div>
 			<div className="w-full relative mb-[15px]">
 				<Image
-					src={"/event.png"}
+					src={post.imageUrl || "/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"

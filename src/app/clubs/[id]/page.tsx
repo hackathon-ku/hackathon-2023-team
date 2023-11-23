@@ -61,7 +61,7 @@ export default async function ClubsProfile({ params }: Props) {
 
 			<div className="w-full h-[270px] relative -z-10 flex justify-center">
 				<Image
-					src={"/event.png"}
+					src={club.events[0].imageUrl || "/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"
