@@ -4,23 +4,15 @@ import ClubPosts from "./_components/ClubPosts";
 
 import Link from "next/link";
 import Image from "next/image";
-import { Prisma } from "@prisma/client";
 import { cache } from "react";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 import { getCategoryInThai } from "@/lib/event";
+import FollowClubButton from "@/components/FollowClubButton";
 
 type Props = {
 	params: { id: string };
 };
-
-export type PostInclude = Prisma.PostGetPayload<{
-	include: {
-		club: true;
-		owner: true;
-		likes: true;
-	};
-}>;
 
 const fetchRoleById = cache((userId: number) =>
 	prisma.member.findUnique({
@@ -29,11 +21,15 @@ const fetchRoleById = cache((userId: number) =>
 );
 
 export default async function ClubsProfile({ params }: Props) {
-	const clubId = params.id;
-
 	const club = await prisma.club.findUnique({
 		where: {
-			id: parseInt(clubId),
+			id: parseInt(params.id),
+		},
+		include: {
+			subscribers: true,
+			events: { where: { approved: true } },
+			members: { select: { id: true, user: true } },
+			posts: { include: { owner: true, likes: true, club: true } },
 		},
 	});
 
@@ -41,25 +37,8 @@ export default async function ClubsProfile({ params }: Props) {
 		return <div>Club not found</div>;
 	}
 
-	const posts = await prisma.post.findMany({
-		where: {
-			clubId: parseInt(clubId),
-		},
-		include: { club: true, owner: true, likes: true },
-	});
-
 	const session = await getServerSession(authOptions);
-
 	const userRole = session ? await fetchRoleById(session.user.id) : null;
-
-	const events = await prisma.event.findMany({
-		where: {
-			clubId: parseInt(clubId),
-			approved: true,
-		},
-	});
-
-	const members = await prisma.user.findMany();
 
 	return (
 		<div>
@@ -93,7 +72,8 @@ export default async function ClubsProfile({ params }: Props) {
 				</div>
 				<div className="flex justify-between">
 					<div className="flex gap-[5px]">
-						<button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">ติดตาม</button>
+						{/* <button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">ติดตาม</button> */}
+						<FollowClubButton clubId={club.id} isFollowing={club.subscribers.some((s) => s.id === session?.user.id)} />
 						<button className="px-[15px] py-[4px] w-min bg-white bg-opacity-25 rounded-[20px] whitespace-nowrap">
 							สมัครเข้าชมรม
 						</button>
@@ -120,14 +100,14 @@ export default async function ClubsProfile({ params }: Props) {
 				<div className="flex justify-between px-[24px] pt-[24px]">
 					<h1 className="font-bold text-[#006664]">Upcoming Event</h1>
 					<Link
-						href={`/clubs/${clubId}/events`}
+						href={`/clubs/${club.id}/events`}
 						className="text-[12px] underline underline-offset-2 text-center h-min my-auto"
 					>
 						ดูตารางกิจกรรมทั้งหมด
 					</Link>
 				</div>
 				<div className="flex gap-[10px] pl-[24px] pb-[24px] pt-[15px] pr-[24px] overflow-auto scrollbar-hide">
-					{events.map((event) => (
+					{club.events.map((event) => (
 						<EventBox
 							key={event.id}
 							eventName={event.title}
@@ -148,21 +128,21 @@ export default async function ClubsProfile({ params }: Props) {
 
 			<div className="bg-[#FFFFDD]">
 				<div className="flex justify-between px-[24px] pt-[24px]">
-					<h1 className="font-bold">จำนวนสมาชิก {members.length} คน</h1>
+					<h1 className="font-bold">จำนวนสมาชิก {club.members.length} คน</h1>
 					<Link
-						href={`/clubs/${clubId}/members`}
+						href={`/clubs/${club.id}/members`}
 						className="text-[12px] underline underline-offset-2 text-center h-min my-auto"
 					>
 						ดูสมาชิกทั้งหมด
 					</Link>
 				</div>
 				<div className="flex gap-[15px] px-[24px] pb-[24px] pt-[15px] overflow-auto">
-					{members.map((member) => (
+					{club.members.map((member) => (
 						<div className="w-min h-min flex flex-col whitespace-nowrap gap-[10px]" key={member.id}>
 							<div className="bg-[#006664] w-[32px] h-[32px] rounded-[20px] text-center flex items-center justify-center">
-								<p className="text-white">{member.firstNameEn[0]}</p>
+								<p className="text-white">{member.user.firstNameEn[0]}</p>
 							</div>
-							<p>{member.firstNameTh}</p>
+							<p>{member.user.firstNameTh}</p>
 						</div>
 					))}
 				</div>
@@ -180,7 +160,7 @@ export default async function ClubsProfile({ params }: Props) {
 					)}
 				</div>
 
-				<ClubPosts posts={posts} clubId={clubId} />
+				<ClubPosts posts={club.posts} clubId={club.id} />
 			</div>
 		</div>
 	);
