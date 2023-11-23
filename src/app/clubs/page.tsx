@@ -33,12 +33,12 @@ export default async function Clubs({ searchParams }: Props) {
 				.map((club) => (
 					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
 				))}
-			<p className="font-bold">วิทยาเขตเฉลิมพระเกียรติ จังหวัดสกลนคร</p>
+			{/* <p className="font-bold">วิทยาเขตเฉลิมพระเกียรติ จังหวัดสกลนคร</p>
 			{clubs
 				.filter((club) => club.branch === "Bangkhen")
 				.map((club) => (
 					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
-				))}
+				))} */}
 			<p className="font-bold">วิทยาเขตศรีราชา</p>
 			{clubs
 				.filter((club) => club.branch === "Sriracha")
