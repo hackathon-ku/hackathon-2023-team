@@ -8,6 +8,7 @@ import { Prisma } from "@prisma/client";
 import { cache } from "react";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
+import RegisterButton from "./_components/RegisterButton";
 
 type Props = {
     params: { id: string };
@@ -83,10 +84,10 @@ export default async function ClubsProfile({ params }: Props) {
                     <p>โทรศัพท์: <span>{club?.phoneNumber}</span></p>
                 </div>
                 <div className="flex justify-between">
-                    <div className="flex gap-[5px]">
-                        <button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">follow</button>
-                        <button className="px-[15px] py-[4px] w-min bg-white bg-opacity-25 rounded-[20px] whitespace-nowrap">สมัครเข้าชมรม</button>
-                    </div>
+				<div className="flex gap-2">
+						<button className="px-[15px] py-[4px] w-min border border-1 border-white rounded-[20px]">Follow</button>
+						<RegisterButton clubId={"1"} />
+					</div>
                     <div className="flex gap-[10px]">
                         <Link href={club.socialMedia[0].link} className="flex items-center"><Image alt="facebook" src="/icons/facebook.svg" width="16" height="16" /></Link>
                         <Link href={club.socialMedia[1].link} className="flex items-center"><Image alt="instagram" src="/icons/instagram.svg" width="16" height="16" /></Link>
