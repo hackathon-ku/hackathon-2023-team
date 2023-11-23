@@ -15,7 +15,6 @@ import { DatePickerInput, TimeInput } from "react-hook-form-mantine";
 import { User } from "@prisma/client";
 import { useDisclosure } from "@mantine/hooks";
 
-
 const postFormSchema = z.object({
 	year: z.number().min(1).max(6),
 	faculty: z.string().min(1),
@@ -34,7 +33,7 @@ type PostFormProps = {
 
 export default function MemberPostForm({ user, clubId }: PostFormProps) {
 	const [opened, { open, close }] = useDisclosure(false);
-    const router = useRouter();
+	const router = useRouter();
 
 	const {
 		control,
@@ -45,8 +44,15 @@ export default function MemberPostForm({ user, clubId }: PostFormProps) {
 		resolver: zodResolver(postFormSchema),
 	});
 
-	const onSubmit: SubmitHandler<PostForm> = async (data) => {
-    };
+	const onSubmit = async () => {
+		try {
+			const res = await axios.post(`/api/clubs/${clubId}/members`);
+            console.log(res)
+            router.push(`/clubs/${clubId}`)
+		} catch (error) {
+			console.error("Failed when create member: ", error);
+		}
+	};
 
 	return (
 		<div className="px-6 py-4">
@@ -81,10 +87,17 @@ export default function MemberPostForm({ user, clubId }: PostFormProps) {
 					<Modal centered opened={opened} onClose={close} withCloseButton={false}>
 						<p className="font-light mb-2">คุณตกลงส่งใบสมัครเข้าเป็นสมาชิกชมรม ใช่หรือไม่</p>
 						<div className="flex gap-2 items-center justify-center">
-							<button onClick={() => {router.push('/clubs/' + clubId); close();}} className="py-2 px-4 rounded-full bg-[#006664] text-white">
+							<button
+								onClick={onSubmit}
+								className="py-2 px-4 rounded-full bg-[#006664] text-white"
+							>
 								ตกลง
 							</button>
-							<button type="submit" onClick={close} className="py-2 px-4 rounded-full border border-[#F24B4B] text-[#F24B4B]">
+							<button
+								type="submit"
+								onClick={close}
+								className="py-2 px-4 rounded-full border border-[#F24B4B] text-[#F24B4B]"
+							>
 								ยกเลิก
 							</button>
 						</div>
