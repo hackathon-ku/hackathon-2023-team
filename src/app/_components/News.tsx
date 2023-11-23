@@ -76,13 +76,13 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 	const getPreviousTime = (date: Date) => dayjs(date).fromNow();
 
 	return (
-		<div className="w-full p-4 border rounded-md shadow-sm">
-			<header className="flex items-center gap-2 mb-4">
+		<div className="w-full p-[15px] rounded-[20px]" style={{ boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.10)" }}>
+ 			<header className="flex items-start gap-[10px] mb-[10px]">
 				<div className="rounded-full p-4 h-6 w-6 flex items-center justify-center bg-orange-400 color-white">A</div>
 				<div className="w-full flex-1 flex flex-col">
 					<Link href={`/clubs/${post.clubId}`}>
 						<div className="flex justify-between items-center">
-							<p className="h-1/2 font-normal">{post.club.label}</p>
+						<p className="h-1/2 leading-[20px] font-normal mb-[5px]">{post.club.label}</p>
 						</div>
 					</Link>
 					<p className="h-1/2 text-xs font-light">{post.owner.firstNameTh}</p>
@@ -91,27 +91,33 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 					<Tag tagName={postTypeToLabelPost(post.type)} color={postTypeToColorMap(post.type)} />
 				</div>
 			</header>
-			<div className="mb-2">
-				<span className="mr-2 break-all">{truncateText(post.content)}</span>
+			<h1 className="text-[24px] font-bold">{post.title}</h1>
+ 			<div className="mb-[10px] font-light">
+			 <span className="mr-2 break-all">{truncateText(post.content)}</span>
 				<Link href={`/posts/${post.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
 			</div>
-			<div className="w-full relative mb-2">
+			<div className="w-full relative mb-[15px]">
 				<Image
 					src={"/event.png"}
 					width={0}
 					height={0}
 					sizes="100vw"
-					style={{ width: "100%", height: "auto" }}
+					style={{ width: "100%", height: "auto", borderRadius: '10px' }}
 					alt={"event"}
 				/>
 			</div>
 			{!canApprove(role) ? (
 				<div>
-					<div className="flex gap-1 mb-2">
-						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"post"} />
+					<div className="flex gap-[10px] mb-[10px]">
+					<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"post"} />
+
+						
 						<FiSend className="h-5 w-5" />
+
+						{/* <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} /> */}
+						{/* <Image src={"/send.svg"} height={16} width={16} alt={"share"} /> */}
 					</div>
 					<div className="flex justify-between gap-2">
 						<p className="h-1/2 font-light text-xs">{likeCount} likes</p>

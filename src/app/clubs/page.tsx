@@ -16,7 +16,7 @@ export default async function Clubs({ searchParams }: Props) {
 			OR: [{ name: { contains: searchParams.q ?? "" } }, { label: { contains: searchParams.q ?? "" } }],
 		},
 	});
-
+	
 	return (
 		<div className="p-[24px] flex flex-col gap-[20px]">
 			<h1 className="text-2xl font-bold">ชมรมทั้งหมด</h1>
@@ -28,8 +28,23 @@ export default async function Clubs({ searchParams }: Props) {
 					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
 				))}
 			<p className="font-bold">วิทยาเขตกำแพงแสน</p>
+			{clubs
+				.filter((club) => club.branch === "KamphaengSaen")
+				.map((club) => (
+					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
+				))}
 			<p className="font-bold">วิทยาเขตเฉลิมพระเกียรติ จังหวัดสกลนคร</p>
+			{clubs
+				.filter((club) => club.branch === "Bangkhen")
+				.map((club) => (
+					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
+				))}
 			<p className="font-bold">วิทยาเขตศรีราชา</p>
+			{clubs
+				.filter((club) => club.branch === "Sriracha")
+				.map((club) => (
+					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
+				))}
 			{/* <p>{JSON.stringify(clubs)}</p> */}
 		</div>
 	);

@@ -24,6 +24,7 @@ const fetchMember = cache((clubId: number, userId: number) =>
 );
 
 export default async function ClubsProfile({ params }: Props) {
+	const currentDate = new Date();
 	const club = await prisma.club.findUnique({
 		where: {
 			id: parseInt(params.id),
@@ -39,6 +40,11 @@ export default async function ClubsProfile({ params }: Props) {
 	if (!club) {
 		return <div>Club not found</div>;
 	}
+
+    const upcomingEvents = club.events.filter((event) => {
+		const startDate = new Date(event.startDate);
+		return startDate > currentDate;
+	});
 
 	const session = await getServerSession(authOptions);
 	const member = session
@@ -117,7 +123,7 @@ export default async function ClubsProfile({ params }: Props) {
 					</Link>
 				</div>
 				<div className="flex gap-[10px] pl-[24px] pb-[24px] pt-[15px] pr-[24px] overflow-auto scrollbar-hide">
-					{club.events.map((event) => (
+					{upcomingEvents.map((event) => (
 						<Link href={`/events/${event.id}`} key={event.id}>
 							<EventBox
 								eventName={event.title}

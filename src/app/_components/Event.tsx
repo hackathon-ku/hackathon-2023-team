@@ -11,7 +11,7 @@ interface EventBoxProps {
 
 const EventBox: React.FC<EventBoxProps> = ({ clubName, eventName, startDate, endDate, location }) => {
   return (
-    <div className="w-full p-4 border rounded-md shadow-sm">
+    <div className="w-full p-4 rounded-[20px]" style={{ boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.10)" }}>
       <header className="flex items-center gap-2 mb-2">
         <div className="rounded-full p-4 h-6 w-6 flex items-center justify-center bg-orange-400 color-white">
           A

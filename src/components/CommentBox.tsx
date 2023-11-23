@@ -10,7 +10,7 @@ interface CommentProps {
 
 const CommentBox: React.FC<CommentProps> = ({ name, message, createdAt, isYou, firstChar }) => {
 	return (
-		<div className="w-full flex flex-col gap-2 border-b pb-6">
+		<div className="w-full flex flex-col gap-[15px] border-b pb-[15px]">
 			<div className="flex-1 flex items-center justify-between">
 				<div className="flex gap-2 items-center">
 					<div className="rounded-full p-4 h-6 w-6 flex items-center justify-center bg-[#006664] text-white">
@@ -18,7 +18,7 @@ const CommentBox: React.FC<CommentProps> = ({ name, message, createdAt, isYou, f
 					</div>
 					<div>{isYou ? "คุณ" : name}</div>
 				</div>
-				<div>
+				<div className="font-light text-[12px]">
 					{createdAt.toLocaleDateString("th-TH", {
 						year: "numeric",
 						month: "long",
@@ -26,7 +26,7 @@ const CommentBox: React.FC<CommentProps> = ({ name, message, createdAt, isYou, f
 					})}
 				</div>
 			</div>
-			<p>{message}</p>
+			<p className="font-light">{message}</p>
 		</div>
 	);
 };

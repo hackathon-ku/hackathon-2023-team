@@ -41,9 +41,9 @@ const PostDetail = ({ post }: PostDetailProps) => {
 	};
 
 	return (
-		<div className="w-full p-8 flex flex-col gap-3">
+		<div className="w-full p-[24px] flex flex-col gap-[10px]">
 			<header>
-				<div className="flex justify-between font-light text-sm mb-2">
+				<div className="flex justify-between font-light text-sm mb-[10px]">
 					<span>
 						โดย {post.owner.firstNameTh} {post.owner.lastNameTh}
 					</span>
@@ -57,7 +57,7 @@ const PostDetail = ({ post }: PostDetailProps) => {
 				</div>
 				<span className="text-2xl font-bold">{post.title}</span>
 			</header>
-			<section className="flex flex-col gap-2">
+			<section className="flex flex-col gap-[15px]">
 				<Tag tagName={postTypeToLabelPost(post.type)} color={postTypeToColorMap(post.type)} />
 				<p className="font-light">{post.content}</p>
 				<div className="flex gap-2">

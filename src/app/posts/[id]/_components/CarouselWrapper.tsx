@@ -12,7 +12,7 @@ const CarouselWrapper = () => {
 					width={0}
 					height={0}
 					sizes="100vw"
-					style={{ width: "100%", height: "auto" }}
+					style={{ width: "auto", height: "100%", objectFit: "cover"  }}
 					alt={"event"}
 				/>
 			</Carousel.Slide>
@@ -22,7 +22,7 @@ const CarouselWrapper = () => {
 					width={0}
 					height={0}
 					sizes="100vw"
-					style={{ width: "100%", height: "auto" }}
+					style={{ width: "auto", height: "100%", objectFit: "cover"  }}
 					alt={"event"}
 				/>
 			</Carousel.Slide>
