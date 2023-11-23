@@ -16,7 +16,7 @@ export const postTypeToLabelPost = (type: PostType) => {
 		case PostType.NORMAL_POST:
 			return "โพสต์ทั่วไป";
 		case PostType.NEWS:
-			return "ข่าวสาร";
+			return "news";
 		case PostType.QA:
 			return "Q&A";
 	}
