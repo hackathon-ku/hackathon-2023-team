@@ -17,6 +17,8 @@ import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
 import { useDisclosure } from "@mantine/hooks";
 import Modal from "@/components/CustomModal";
 import { useRouter } from "next/navigation";
+import { FaRegComment } from "react-icons/fa6";
+import { FiSend } from "react-icons/fi";
 interface NewsProps {
 	post: PostInclude;
 	role?: Role;
@@ -109,8 +111,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 				<div>
 					<div className="flex gap-1 mb-2">
 						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"post"} />
-						<ChatBubbleOvalLeftIcon className="h-5 w-5" />
-						<PaperAirplaneIcon className="h-5 w-5" />
+						<FiSend className="h-5 w-5" />
 					</div>
 					<div className="flex justify-between gap-2">
 						<p className="h-1/2 font-light text-xs">{likeCount} likes</p>

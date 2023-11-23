@@ -62,7 +62,6 @@ const PostDetail = ({ post }: PostDetailProps) => {
 				<p className="font-light">{post.content}</p>
 				<div className="flex gap-2">
 					<LikeButton isLike={isLike} like={like} unlike={unlike} postId={post.id} type="post" />
-					<FaRegComment className="h-5 w-5" />
 					<FiSend className="h-5 w-5" />
 				</div>
 				{likeCount > 0 && <p className="font-light text-sm">{likeCount} likes</p>}
