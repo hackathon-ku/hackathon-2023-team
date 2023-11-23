@@ -1,17 +1,19 @@
-import React from 'react'
+import React from "react";
 
 interface TagProps {
-    tagName: string,
-    color: string
+	tagName: string;
+	color: string;
 }
 
 const Tag = ({ tagName, color }: TagProps) => {
-  console.log(color)
-  return (
-    <div className={`flex w-fit justify-center py-1 px-2 rounded-full ${color} text-white font-light text-sm`} style={{ backgroundColor: color.slice(4, -1)}}>
-        {tagName}
-    </div>
-  )
-}
+	return (
+		<div
+			className={`flex w-fit justify-center py-1 px-2 rounded-full ${color} text-white font-light text-sm`}
+			style={{ backgroundColor: color.slice(4, -1) }}
+		>
+			{tagName}
+		</div>
+	);
+};
 
-export default Tag
+export default Tag;
