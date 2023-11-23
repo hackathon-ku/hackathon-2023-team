@@ -35,10 +35,10 @@ const CalendarWithFilter: React.FC<CalendarWithFilterProps> = ({ events, user, c
 		let filtered = events;
 
 		if (user) {
-			if (filterFollowings.event) {
-				const followersId = events.map(e => e.followers).flat().map(f => f.id);
-	
-				filtered = filtered.filter(_ => followersId.includes(user.id));
+			if (filterFollowings.event) {	
+				filtered = filtered.filter(e => {
+					return e.followers.map(f => f.id).includes(user.id);
+				});
 			}
 
 			if (filterFollowings.club) {

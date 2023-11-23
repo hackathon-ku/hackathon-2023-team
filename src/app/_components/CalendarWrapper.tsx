@@ -8,6 +8,7 @@ import { Club, Event, User } from "@prisma/client";
 import { Indicator } from "@mantine/core";
 import EventBox from "./Event";
 import { animated, useSpring, useTransition } from "@react-spring/web";
+import Link from "next/link";
 
 dayjs.extend(localeData);
 dayjs.locale("th");
@@ -161,14 +162,16 @@ const CalendarWrapper: React.FC<CalendarWrapperProps> = ({ events }) => {
       ></DatePicker>
       {eventTransition((style, item) =>
         (<animated.div style={style}>
-          <EventBox
-            clubName={item.club.name}
-            eventName={item.title}
-            startDate={item.startDate}
-            endDate={item.endDate}
-            location={item.location}
-            key={item.id}
-          />
+          <Link href={"/events/" + item.id}>
+            <EventBox
+              clubName={item.club.name}
+              eventName={item.title}
+              startDate={item.startDate}
+              endDate={item.endDate}
+              location={item.location}
+              key={item.id}
+            />
+          </Link>
         </animated.div>)
       )}
       {<animated.p style={props}>ไม่มีกิจกรรมในช่วงเวลานี้</animated.p>}
