@@ -67,25 +67,29 @@ export default async function RequestedPostsPage({ params }: RequestedPostsPageP
 
 	return (
 		<div className="flex flex-col">
-			<div className="bg-[#006664] px-6 py-4">
-				<span className="text-white font-bold">{club.label}</span>
+			<div className="px-6 pt-4">
+				<span className="text-[#2F3337] text-2xl font-bold">{club.label}</span>
 			</div>
-			<div className="p-[24px] flex flex-col gap-[20px] items-center">
-				<div className="flex justify-between w-full"></div>
-				{club.events
-					? club.events.map((p) => (
-							<div key={p.id}>
-								<NewsEvent event={p} role={member?.role} />
-							</div>
-					  ))
-					: "No waiting requested posts"}
-				{club.posts
-					? club.posts.map((p) => (
-							<div key={p.id}>
-								<News post={p} role={member?.role} />
-							</div>
-					  ))
-					: "No waiting requested posts"}
+
+			<div className="p-[24px] flex flex-col gap-[20px] ">
+				<p className="font-bold text-base">อนุมัติโพสต์</p>
+				<div className="items-center">
+					<div className="flex justify-between w-full"></div>
+					{club.events
+						? club.events.map((p) => (
+								<div key={p.id}>
+									<NewsEvent event={p} role={member?.role} />
+								</div>
+						  ))
+						: "No waiting requested posts"}
+					{club.posts
+						? club.posts.map((p) => (
+								<div key={p.id}>
+									<News post={p} role={member?.role} />
+								</div>
+						  ))
+						: "No waiting requested posts"}
+				</div>
 			</div>
 		</div>
 	);
