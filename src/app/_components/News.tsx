@@ -70,7 +70,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 		setLikeCount((prev) => prev - 1);
 	};
 
-	const truncateText = (text: string) => (text.length >= 100 ? text.substring(0, 99) + "..." : text);
+	const truncateText = (text: string) => (text.length >= 50 ? text.substring(0, 49) + "..." : text);
 	const getPreviousTime = (date: Date) => dayjs(date).fromNow();
 
 	return (
@@ -90,7 +90,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 				</div>
 			</header>
 			<div className="mb-2">
-				{truncateText(post.content)}{" "}
+				<span className="mr-2 break-all">{truncateText(post.content)}</span>
 				<Link href={`/posts/${post.id}`}>
 					<span style={{ color: "#006664", textDecoration: "underline" }}>อ่านเพิ่มเติม</span>
 				</Link>
@@ -108,13 +108,7 @@ const News: React.FC<NewsProps> = ({ post, role }) => {
 			{!canApprove(role) ? (
 				<div>
 					<div className="flex gap-1 mb-2">
-						<LikeButton
-							isLike={isLike}
-							like={like}
-							unlike={unlike}
-							postId={0}
-							type={"post"}
-						/>
+						<LikeButton isLike={isLike} like={like} unlike={unlike} postId={0} type={"post"} />
 						<ChatBubbleOvalLeftIcon className="h-5 w-5" />
 						<PaperAirplaneIcon className="h-5 w-5" />
 					</div>

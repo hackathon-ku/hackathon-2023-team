@@ -43,10 +43,9 @@ export default function PostForm({ clubId, role }: PostFormProps) {
 	if (!role) return null;
 
 	const onSubmit: SubmitHandler<PostForm> = async (data) => {
-		const path = postType === "event" ? "events" : "posts";
 		try {
 			await axios.post(`/api/posts?type=${postType}`, { ...data, clubId });
-			router.push(`/clubs/${clubId}/${path}`);
+			router.push(`/clubs/${clubId}`);
 		} catch (error) {
 			console.error(error);
 		}
