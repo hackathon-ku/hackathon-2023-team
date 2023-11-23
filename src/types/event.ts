@@ -6,5 +6,6 @@ export type EventIncludeAll = Prisma.EventGetPayload<{
 		owner: { select: { user: true } };
 		likes: true;
 		comments: { select: { id: true; message: true; createdAt: true; user: true } };
+		followers: true;
 	};
 }>;

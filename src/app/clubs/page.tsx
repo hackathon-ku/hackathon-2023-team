@@ -1,6 +1,6 @@
 import Search from "@/components/Search";
 import prisma from "@/lib/prisma";
-import ClubBox from '@/components/ClubBox'
+import ClubBox from "@/components/ClubBox";
 
 type ClubQuery = {
 	q: string | undefined;
@@ -23,10 +23,10 @@ export default async function Clubs({ searchParams }: Props) {
 			<Search type="clubs" placeholder="ค้นหาชมรม" />
 			<p className="font-bold">บางเขน</p>
 			{clubs
-			.filter((club) => club.branch === 'Bangkhen')
-			.map((club) => (
-				<ClubBox clubName={club.label} clubId={club.id} key={club.id} />
-			))}
+				.filter((club) => club.branch === "Bangkhen")
+				.map((club) => (
+					<ClubBox clubId={club.id} clubName={club.label} key={club.id} />
+				))}
 			<p className="font-bold">วิทยาเขตกำแพงแสน</p>
 			<p className="font-bold">วิทยาเขตเฉลิมพระเกียรติ จังหวัดสกลนคร</p>
 			<p className="font-bold">วิทยาเขตศรีราชา</p>

@@ -20,6 +20,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 			owner: { select: { user: true } },
 			likes: true,
 			comments: { select: { id: true, message: true, createdAt: true, user: true }, orderBy: { createdAt: "desc" } },
+			followers: true,
 		},
 	});
 
