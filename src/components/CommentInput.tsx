@@ -7,9 +7,10 @@ import { VscSend } from "react-icons/vsc";
 
 type CommentInputProps = {
 	postId: number;
+	type: "event" | "post";
 };
 
-export default function CommentInput({ postId }: CommentInputProps) {
+export default function CommentInput({ postId, type }: CommentInputProps) {
 	const [comment, setComment] = useState<string>("");
 	const router = useRouter();
 
@@ -18,6 +19,7 @@ export default function CommentInput({ postId }: CommentInputProps) {
 
 		try {
 			await axios.post(`/api/posts/${postId}/comment`, {
+				type: type,
 				message: comment,
 			});
 			setComment("");

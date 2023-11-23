@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 
 const createCommentSchema = z.object({
 	message: z.string().min(1).max(1000),
+	type: z.enum(["event", "post"]),
 });
 
 export async function POST(request: NextRequest, { params }: PostParams) {
@@ -16,6 +17,7 @@ export async function POST(request: NextRequest, { params }: PostParams) {
 	if (!validator.success) {
 		return NextResponse.json("กรุณากรอกข้อมูลให้ถูกต้อง", { status: 400 });
 	}
+	const { type, message } = validator.data;
 
 	const session = await getServerSession(authOptions);
 	if (!session) {
@@ -25,9 +27,10 @@ export async function POST(request: NextRequest, { params }: PostParams) {
 	try {
 		const newComment = await prisma.comment.create({
 			data: {
-				message: validator.data.message,
+				message: message,
 				userId: session.user.id,
-				postId: parseInt(params.id),
+				postId: type === "post" ? parseInt(params.id) : undefined,
+				eventId: type === "event" ? parseInt(params.id) : undefined,
 			},
 		});
 

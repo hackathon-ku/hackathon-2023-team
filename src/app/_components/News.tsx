@@ -14,6 +14,8 @@ import { ChatBubbleOvalLeftIcon, PaperAirplaneIcon } from "@heroicons/react/24/o
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { postTypeToColorMap, postTypeToLabelPost } from "@/lib/post";
+import { FaRegComment } from "react-icons/fa6";
+import { FiSend } from "react-icons/fi";
 interface NewsProps {
 	post: PostInclude;
 }
@@ -38,33 +40,13 @@ const News: React.FC<NewsProps> = ({ post }) => {
 		}
 	}, [isAuthenticated, session, post]);
 
-	const like = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.post(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev + 1);
-		} catch (error) {
-			console.error("Post like failed: ", error);
-		}
+	const like = () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev + 1);
 	};
-	const unlike = async (postId: number) => {
-		if (!isAuthenticated) {
-			alert("กรุณาเข้าสู่ระบบ");
-			return;
-		}
-
-		try {
-			await axios.delete(`/api/posts/${postId}/like`);
-			setIsLike((prev) => !prev);
-			setLikeCount((prev) => prev - 1);
-		} catch (error) {
-			console.error("Unlike failed: ", error);
-		}
+	const unlike = async () => {
+		setIsLike((prev) => !prev);
+		setLikeCount((prev) => prev - 1);
 	};
 
 	const truncateText = (text: string) => (text.length >= 100 ? text.substring(0, 99) + "..." : text);
@@ -102,10 +84,10 @@ const News: React.FC<NewsProps> = ({ post }) => {
 					alt={"event"}
 				/>
 			</div>
-			<div className="flex gap-1 mb-2">
-				<LikeButton isLike={isLike} like={() => like(post.id)} unlike={() => unlike(post.id)} />
-				<ChatBubbleOvalLeftIcon className="h-5 w-5" />
-				<PaperAirplaneIcon className="h-5 w-5" />
+			<div className="flex gap-2 mb-2">
+				<LikeButton isLike={isLike} like={like} unlike={unlike} postId={post.id} type="post" />
+				<FaRegComment className="h-5 w-5" />
+				<FiSend className="h-5 w-5" />
 				{/* <Image src={"/chat.svg"} height={16} width={16} alt={"comment"} /> */}
 				{/* <Image src={"/send.svg"} height={16} width={16} alt={"share"} /> */}
 			</div>
